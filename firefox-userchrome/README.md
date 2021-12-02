@@ -9,7 +9,7 @@ Custom Firefox style file with the following changes:
 
 ## Installation
 
-1. Download: GitHub repo > green top right button *Code* > *Download ZIP* > unpack and extract `userchrome.css` .
+1. Download: GitHub repo > green top right button *Code* > *Download ZIP* > unpack and extract `userChrome.css` .
 
 2. For how to install a userchrome file, see e.g. [here](https://www.howtogeek.com/334716/how-to-customize-firefoxs-user-interface-with-userchrome.css/).
 
