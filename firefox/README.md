@@ -1,4 +1,4 @@
-# Firefox Userchrome
+# Firefox userchrome
 
 Custom Firefox style file with the following changes:
 
