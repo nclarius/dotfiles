@@ -1,0 +1,21 @@
+[Common]
+OutlineCloseButton=true
+ShadowSize=ShadowSmall
+ShadowStrength=128
+
+[Style]
+MenuOpacity=50
+TabBarDrawCenteredTabs=true
+
+[Windeco]
+DrawBackgroundGradient=false
+DrawBorderOnMaximizedWindows=true
+DrawTitleBarSeparator=false
+
+[Windeco Exception 0]
+BorderSize=0
+Enabled=false
+ExceptionPattern=.*
+ExceptionType=0
+HideTitleBar=true
+Mask=0

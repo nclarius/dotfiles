@@ -1,0 +1,215 @@
+[$Version]
+update_info=filepicker.upd:filepicker-remove-old-previews-entry,fonts_global.upd:Fonts_Global,fonts_global_toolbar.upd:Fonts_Global_Toolbar,icons_remove_effects.upd:IconsRemoveEffects,kwin.upd:animation-speed,style_widgetstyle_default_breeze.upd:StyleWidgetStyleDefaultBreeze
+
+[ColorEffects:Disabled]
+ChangeSelectionColor=
+Color=56,56,56
+ColorAmount=0
+ColorEffect=0
+ContrastAmount=0.65
+ContrastEffect=1
+Enable=
+IntensityAmount=0.1
+IntensityEffect=2
+
+[ColorEffects:Inactive]
+ChangeSelectionColor=true
+Color=112,111,110
+ColorAmount=0.025
+ColorEffect=2
+ContrastAmount=0.1
+ContrastEffect=2
+Enable=false
+IntensityAmount=0
+IntensityEffect=0
+
+[Colors:Button]
+BackgroundAlternate=30,87,116
+BackgroundNormal=49,54,59
+DecorationFocus=0,211,184
+DecorationHover=0,211,184
+ForegroundActive=0,211,184
+ForegroundInactive=161,169,177
+ForegroundLink=0,211,184
+ForegroundNegative=218,68,83
+ForegroundNeutral=246,116,0
+ForegroundNormal=252,252,252
+ForegroundPositive=39,174,96
+ForegroundVisited=155,89,182
+
+[Colors:Complementary]
+BackgroundAlternate=30,87,116
+BackgroundNormal=42,46,50
+DecorationFocus=0,211,184
+DecorationHover=0,211,184
+ForegroundActive=0,211,184
+ForegroundInactive=161,169,177
+ForegroundLink=0,211,184
+ForegroundNegative=218,68,83
+ForegroundNeutral=246,116,0
+ForegroundNormal=252,252,252
+ForegroundPositive=39,174,96
+ForegroundVisited=155,89,182
+
+[Colors:Header]
+BackgroundAlternate=42,46,50
+BackgroundNormal=49,54,59
+DecorationFocus=0,211,184
+DecorationHover=0,211,184
+ForegroundActive=0,211,184
+ForegroundInactive=161,169,177
+ForegroundLink=0,211,184
+ForegroundNegative=218,68,83
+ForegroundNeutral=246,116,0
+ForegroundNormal=252,252,252
+ForegroundPositive=39,174,96
+ForegroundVisited=155,89,182
+
+[Colors:Header][Inactive]
+BackgroundAlternate=49,54,59
+BackgroundNormal=42,46,50
+DecorationFocus=61,174,233
+DecorationHover=61,174,233
+ForegroundActive=61,174,233
+ForegroundInactive=161,169,177
+ForegroundLink=29,153,243
+ForegroundNegative=218,68,83
+ForegroundNeutral=246,116,0
+ForegroundNormal=252,252,252
+ForegroundPositive=39,174,96
+ForegroundVisited=155,89,182
+
+[Colors:Selection]
+BackgroundAlternate=16,102,92
+BackgroundNormal=16,102,92
+DecorationFocus=0,211,184
+DecorationHover=0,211,184
+ForegroundActive=0,211,184
+ForegroundInactive=161,169,177
+ForegroundLink=0,211,184
+ForegroundNegative=176,55,69
+ForegroundNeutral=198,92,0
+ForegroundNormal=252,252,252
+ForegroundPositive=23,104,57
+ForegroundVisited=155,89,182
+
+[Colors:Tooltip]
+BackgroundAlternate=42,46,50
+BackgroundNormal=49,54,59
+DecorationFocus=0,211,184
+DecorationHover=0,211,184
+ForegroundActive=0,211,184
+ForegroundInactive=161,169,177
+ForegroundLink=0,211,184
+ForegroundNegative=218,68,83
+ForegroundNeutral=246,116,0
+ForegroundNormal=252,252,252
+ForegroundPositive=39,174,96
+ForegroundVisited=155,89,182
+
+[Colors:View]
+BackgroundAlternate=35,38,41
+BackgroundNormal=27,30,32
+DecorationFocus=0,211,184
+DecorationHover=0,211,184
+ForegroundActive=0,211,184
+ForegroundInactive=161,169,177
+ForegroundLink=0,211,184
+ForegroundNegative=218,68,83
+ForegroundNeutral=246,116,0
+ForegroundNormal=252,252,252
+ForegroundPositive=39,174,96
+ForegroundVisited=155,89,182
+
+[Colors:Window]
+BackgroundAlternate=49,54,59
+BackgroundNormal=42,46,50
+DecorationFocus=0,211,184
+DecorationHover=0,211,184
+ForegroundActive=0,211,184
+ForegroundInactive=161,169,177
+ForegroundLink=0,211,184
+ForegroundNegative=218,68,83
+ForegroundNeutral=246,116,0
+ForegroundNormal=252,252,252
+ForegroundPositive=39,174,96
+ForegroundVisited=155,89,182
+
+[DirSelect Dialog]
+DirSelectDialog Size=857,598
+History Items[$e]=file:$HOME/Bilder/Hintergrundbilder/Natur/Aurora,file:$HOME/Bilder/Hintergrundbilder/Natur/Aurora,file:$HOME/Bilder/Hintergrundbilder/Natur/Aurora,file:$HOME/Bilder/Hintergrundbilder/Natur/Aurora,file:$HOME/Bilder/Hintergrundbilder/Natur/Aurora,file:$HOME/Bilder/Hintergrundbilder/Natur/Aurora,file:$HOME/kde,file:$HOME/Bilder/Hintergrundbilder/Natur/Winter,file:$HOME/Bilder/Hintergrundbilder/Abstrakt/Blau,file:$HOME/Bilder/Hintergrundbilder/Natur/Winter,file:$HOME/Bilder/Hintergrundbilder/Natur/Winter,file:$HOME,file:$HOME/Bilder/Hintergrundbilder/Natur/Winter,file:$HOME/Bilder/Hintergrundbilder/Natur/Herbst,file:$HOME/Bilder/Hintergrundbilder/Natur/Winter,file:$HOME/Bilder/Hintergrundbilder/Natur/Winter,file:$HOME/Bilder/Hintergrundbilder/Natur/Winter,file:$HOME/Bilder/Hintergrundbilder/Natur/Winter,file:$HOME/Bilder/Hintergrundbilder/Natur/Winter,file:$HOME/Bilder,file:$HOME/Android,file:$HOME/Dropbox/Data/Corpora,file:$HOME/Bilder/Hintergrundbilder/Natur/Winter,file:$HOME/Bilder/Hintergrundbilder/Natur/Winter,file:$HOME/Bilder/Hintergrundbilder/Natur/Winter,file:$HOME/Bilder/Hintergrundbilder/Abstrakt/Pastell,file:$HOME/Bilder/Hintergrundbilder/Abstrakt/Pastell,file:$HOME/Bilder/Hintergrundbilder/Natur/Herbst,file:$HOME/Bilder/Hintergrundbilder/Abstrakt/Pastell,file:$HOME/Bilder/Hintergrundbilder/Abstrakt/Pastell,file:$HOME/Videos/Webcam,file:$HOME/Bilder/Fotos/Webcam,file:$HOME/Bilder/Hintergrundbilder/Abstrakt/Pastell,file:$HOME/Bilder/Hintergrundbilder/Natur/Mohnblumen,file:$HOME/Bilder/Hintergrundbilder/Natur/Mohnblumen,file:$HOME/Bilder/Hintergrundbilder/Natur/Mohnblumen,file:$HOME/Bilder/Hintergrundbilder/Natur/Mohnblumen,file:$HOME/Bilder/Hintergrundbilder/Natur/Mohnblumen,file:$HOME/Bilder/Hintergrundbilder/Abstrakt/Pastell,file:$HOME/Bilder/Fotos/2021/2021_04_24_Silhouette,file:$HOME/Bilder/Hintergrundbilder/Natur/Frühling,file:$HOME/Bilder/Hintergrundbilder/Natur/Frühling,file:$HOME/Bilder/Hintergrundbilder/Natur/Blumen,file:$HOME/Dropbox/Uni/Proj_GramForm/slotgram,file:$HOME/Bilder/Hintergrundbilder/Natur/Frühling,file:$HOME/Bilder/Hintergrundbilder/Natur/Frühling,file:$HOME/Dropbox/Dokumente/Beschäftigung/Arbeitsverträge/Uni-TÜ/original,file:$HOME/Dropbox/Uni/VL_IntroLing/28_Exam,file:$HOME/Dropbox,file:$HOME/Bilder/Fotos
+
+[General]
+AccentColor=0,211,184
+AllowKDEAppsToRememberWindowPositions=false
+BrowserApplication=/home/natalie/.local/share/applications/open_firefox_on_current_desktop.sh-2.desktop
+ColorScheme=BreezeDark
+Name=Breeze Light
+Name[de_DE]=Breeze
+XftHintStyle=hintslight
+XftSubPixel=rgb
+dbfile=/home/natalie/.mozilla/firefox/l5l35hhv.natalie/places.sqlite
+fixed=Hack,10,-1,5,50,0,0,0,0,0
+font=Manrope,10,-1,5,50,0,0,0,0,0
+menuFont=Manrope,10,-1,5,50,0,0,0,0,0
+shadeSortColumn=true
+smallestReadableFont=Manrope,8,-1,5,50,0,0,0,0,0
+toolBarFont=Manrope,10,-1,5,50,0,0,0,0,0
+widgetStyle=Breeze
+
+[Icons]
+Theme=Tela
+
+[KDE]
+ColorScheme=Breeze
+ScrollbarLeftClickNavigatesByPage=false
+ShowDeleteCommand=true
+SingleClick=true
+contrast=4
+
+[KFileDialog Settings]
+Allow Expansion=false
+Automatically select filename extension=true
+Breadcrumb Navigation=false
+Decoration position=0
+LocationCombo Completionmode=5
+PathCombo Completionmode=5
+Show Bookmarks=false
+Show Full Path=false
+Show Inline Previews=true
+Show Preview=false
+Show Speedbar=true
+Show hidden files=true
+Sort by=Name
+Sort directories first=true
+Sort reversed=false
+Speedbar Width=161
+View Style=Detail
+detailedViewIconSize=0
+listViewIconSize=30
+
+[KShortcutsDialog Settings]
+Dialog Size=854,639
+
+[PreviewSettings]
+MaximumRemoteSize=0
+
+[Shortcuts]
+Activate Next Tab=Ctrl+]
+Activate Previous Tab=Ctrl+[
+Back=Alt+Left
+DocumentForward=
+Forward=Alt+Right
+ShowMenubar=Ctrl+M;\s
+ZoomIn=Ctrl++
+
+[WM]
+activeBackground=49,54,59
+activeBlend=252,252,252
+activeFont=Manrope,10,-1,5,50,0,0,0,0,0
+activeForeground=252,252,252
+frame=0,0,0
+inactiveBackground=42,46,50
+inactiveBlend=161,169,177
+inactiveForeground=161,169,177
+inactiveFrame=0,0,0

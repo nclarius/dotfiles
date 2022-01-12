@@ -1,0 +1,9 @@
+[General]
+dbVersion=2
+exclude filters=.hg,moc_*.cpp,lost+found,CMakeFiles,.bzr,*.moc,.pch,*.sql,*.pyc,*.a,.moc,*.vmdk,nbproject,.npm,*.sql.gz,*.gbff,*.fastq,.yarn,CMakeCache.txt,*.la,*.pyo,*.so,*.fna,.obj,*.loT,*.pc,*.nvram,Makefile.am,*.class,*.vhdx,*.lo,conftest,cmake_install.cmake,.yarn-cache,*.map,*.ini,*.o,*.qmlc,CTestTestfile.cmake,*.part,autom4te,*.omf,*~,confdefs.h,.uic,*.fq,*.vhd,*.gb,*.rej,confstat,*.jsc,__pycache__,config.status,.histfile.*,*.aux,*.init,*.vdi,*.rcore,*.swap,node_packages,*.vm*,qrc_*.cpp,*.db,*.gcode,node_modules,*.img,*.vbox*,CMakeTmp,*.qcow2,litmain.sh,.svn,ui_*.h,vbox.log,*.m4,*.csproj,core-dumps,*.elc,libtool,_darcs,*.po,*.tmp,po,CMakeTmpQmake,.xsession-errors*,*.gmo,*.fasta,*.faa,lzo,.git,*.orig,CVS,*.qrc
+exclude filters version=2
+exclude mimetypes=text/x-pascal,text/x-ruby,text/x-sed,text/x-readme,application/xml,application/x-php,application/x-csh,application/json-patch+json,text/x-fortran,text/x-scheme,text/x-c++hdr,text/x-chdr,text/x-objsrc,text/x-csrc,text/vnd.trolltech.linguist,application/x-java,text/x-yacc,text/x-haskell,application/x-javascript,application/ld+json,text/x-copying,text/css,text/x-lua,application/x-perl,application/x-sh,text/x-java,text/jsx,text/x-cmake,text/csx,application/javascript,text/x-erlang,text/x-qml,text/x-assembly,text/asp,application/geo+json,application/json,application/x-awk,application/pgp-encrypted,application/x-ipynb+json,application/x-cgi
+first run=false
+folders[$e]=$HOME/
+index hidden folders=false
+only basic indexing=false
