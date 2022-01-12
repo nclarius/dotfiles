@@ -1,0 +1,17 @@
+# auto completion
+$UPDATE_COMPLETIONS_ON_KEYPRESS=True #Completions display is evaluated and presented whenever a key is pressed. This avoids the need to press TAB, except to cycle through the possibilities. This currently only affects the prompt-toolkit shell.
+$AUTO_SUGGEST_IN_COMPLETIONS=True #Places the auto-suggest result as the first option in the completions. This enables you to tab complete the auto-suggestion.
+$XONSH_AUTOPAIR=True #Whether Xonsh will auto-insert matching parentheses, brackets, and quotes. Only available under the prompt-toolkit shell.
+$ALIAS_COMPLETIONS_OPTIONS_BY_DEFAULT=True #If True, Argparser based alias completions will show options (e.g. -h, …) without requesting explicitly with option prefix (-).
+$COMPLETIONS_CONFIRM=False #While tab-completions menu is displayed, press <Enter> to confirm completion instead of running command. This only affects the prompt-toolkit shell.
+
+# prompt style
+$PROMPT = '{BACKGROUND_INTENSE_GREEN}{BLACK}{cwd} ❯{RESET}{RESET} '
+
+# aliases
+aliases['d'] = 'cd $arg0 && ls'
+aliases['f'] = 'nano $arg0'
+aliases['pacman-upgrade'] = 'sudo pacman -Syu; yay -Syu'
+aliases['pacman-database'] = 'sudo pacman -Syy'
+aliases['pacman-search'] = 'pacman -Ss $arg0; yay -Ss $arg0'
+aliases['pacman-cache'] = 'sudo paccache -rk 2'
