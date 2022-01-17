@@ -8,10 +8,22 @@ $COMPLETIONS_CONFIRM=False #While tab-completions menu is displayed, press <Ente
 # prompt style
 $PROMPT = '{BACKGROUND_INTENSE_GREEN}{BLACK}{cwd} {RESET}{INVERT_INTENSE_GREEN}\uE0B0{RESET}{RESET} '
 
-# aliases
-aliases['d'] = 'cd $arg0 && ls'
-aliases['f'] = 'nano $arg0'
+# alias for opening directory or file
+def _d(args):
+    if !(test -d @(args[0])):
+        # directory: enter and list contents
+        cd @(args[0] ) && ls
+    else:
+        # file: edit with nano
+        nano @(args[0])
+aliases['d'] = _d
+
+# aliases for pacman
 aliases['pacman-upgrade'] = 'sudo pacman -Syu; yay -Syu'
 aliases['pacman-database'] = 'sudo pacman -Syy'
 aliases['pacman-search'] = 'pacman -Ss $arg0; yay -Ss $arg0'
 aliases['pacman-cache'] = 'sudo paccache -rk 2'
+
+# aliases for shell scripts
+aliases['lpd'] = '~/Dropbox/Code/Shell/duplex_print_CLI.sh'
+aliases['replace'] = '~/Dropbox/Code/Shell/replace.py'
