@@ -6,7 +6,7 @@ $ALIAS_COMPLETIONS_OPTIONS_BY_DEFAULT=True #If True, Argparser based alias compl
 $COMPLETIONS_CONFIRM=False #While tab-completions menu is displayed, press <Enter> to confirm completion instead of running command. This only affects the prompt-toolkit shell.
 
 # prompt style
-$PROMPT = '{BACKGROUND_INTENSE_GREEN}{BLACK}{cwd} ❯{RESET}{RESET} '
+$PROMPT = '{BACKGROUND_INTENSE_GREEN}{BLACK}{cwd} {RESET}{INVERT_INTENSE_GREEN}\uE0B0{RESET}{RESET} '
 
 # aliases
 aliases['d'] = 'cd $arg0 && ls'
