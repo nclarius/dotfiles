@@ -1,5 +1,5 @@
 # prompt style
-$PROMPT = '{BACKGROUND_INTENSE_GREEN}{BLACK}{cwd} {RESET}{INVERT_INTENSE_GREEN}\uE0B0{RESET}{RESET} '
+$PROMPT = '{BACKGROUND_WHITE}{BLACK}{cwd} {RESET}{INVERT_WHITE}\uE0B0{RESET}{RESET} '
 
 # auto completion
 $UPDATE_COMPLETIONS_ON_KEYPRESS=True #Completions display is evaluated and presented whenever a key is pressed. This avoids the need to press TAB, except to cycle through the possibilities. This currently only affects the prompt-toolkit shell.
@@ -13,16 +13,16 @@ def _d(args):
     if !(test -d @(args[0])):
         # directory: enter and list contents
         cd @(args[0]) && ls -A -p --group-directories-first
-    else:
+    elif !(test -f @(args[0])):
         # file: edit with nano
         nano @(args[0])
 aliases['d'] = _d
 
 # aliases for pacman
-aliases['pkg-upgrade'] = 'sudo pacman -Syu; yay -Syu'
-aliases['pkg-database'] = 'sudo pacman -Syy; yay -Syy'
 aliases['pkg-search'] = 'pacman -Ss $arg0; yay -Ss $arg0'
 aliases['pkg-find'] = 'pacman -F $arg0; yay -F $arg0'
+aliases['pkg-database'] = 'sudo pacman -Syy; yay -Syy'
+aliases['pkg-upgrade'] = 'sudo pacman -Syu; yay -Syu'
 aliases['pkg-cache'] = 'sudo paccache -rk 2'
 
 # aliases for shell scripts
