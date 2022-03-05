@@ -1256,7 +1256,7 @@ xkb_symbols "neoqwertz" {
     // output the U+263A smiley.
     key <AC01> { [               u,          U,            Multi_key, NoSymbol,             NoSymbol,             NoSymbol, NoSymbol, NoSymbol ] };
     key <AC02> { [               i,          I,              seconds, NoSymbol,                U017F,                U2211, NoSymbol, NoSymbol ] };
-    key <AC03> { [               a,          A,              aring,   Aring,                  eth,                  ETH, NoSymbol, NoSymbol ] };
+    key <AC03> { [               a,          A,                 aring,   Aring,                  eth,                  ETH, NoSymbol, NoSymbol ] };
     key <AC04> { [               e,          E,     ISO_Level5_Latch, NoSymbol,             NoSymbol,             NoSymbol, NoSymbol, NoSymbol ] };
     key <AC05> { [               o,          O,                U1E9E, NoSymbol,                U02BF,                U261B, NoSymbol, NoSymbol ] };
     key <AC06> { [               s,          S,             NoSymbol, NoSymbol,                U02BE,                U261A, NoSymbol, NoSymbol ] };
@@ -1271,7 +1271,7 @@ xkb_symbols "neoqwertz" {
     // fourth row
     key.type[Group1] = "EIGHT_LEVEL_ALPHABETIC";
     key <AB01> { [      udiaeresis, Udiaeresis,                U203A, NoSymbol,                U2423,                U23D1, NoSymbol, NoSymbol ] };
-    key <AB02> { [      odiaeresis, Odiaerisis,        guillemotright, NoSymbol,   doublelowquotemark,   singlelowquotemark, NoSymbol, NoSymbol ] };
+    key <AB02> { [      odiaeresis, Odiaeresis,       guillemotright, NoSymbol,   doublelowquotemark,   singlelowquotemark, NoSymbol, NoSymbol ] };
     key <AB03> { [      adiaeresis, Adiaeresis,                U202F, NoSymbol,                 cent,            copyright, NoSymbol, NoSymbol ] };
     key <AB04> { [               p,          P,        guillemotleft, NoSymbol,  leftdoublequotemark,  leftsinglequotemark, NoSymbol, NoSymbol ] };
     key <AB05> { [               z,          Z,                U2039, NoSymbol, rightdoublequotemark, rightsinglequotemark, NoSymbol, NoSymbol ] };
