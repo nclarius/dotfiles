@@ -1,7 +1,7 @@
 # ~/.zshrc
 
 # key bindings
-bindkey '^?'      backward-delete-char          # bbackspace delete one char backward
+bindkey '^?'      backward-delete-char          # backspace delete one char backward
 bindkey '^[[3~'   delete-char                   # del        delete one char forward
 bindkey '^[[A'    up-line-or-history            # up         last command
 bindkey '^[[B'    down-line-or-history          # down       next command
@@ -32,7 +32,12 @@ zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}
 zstyle ':completion::complete:*' gain-privileges 1
 
 # history shared across sessions
-setopt share_history
+export HISTFILE=~/.zsh_history
+export HISTSIZE=1000
+export SAVEHIST=1000
+# setopt INC_APPEND_HISTORY
+setopt SHARE_HISTORY
+# setopt appendhistory
 
 # syntax highlighting
 source '/usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh'
@@ -50,11 +55,12 @@ function get_kde_color() {
     echo $color_hex
 }
 accent=$(get_kde_color General AccentColor)
+# accent=$(get_kde_color Colors:View DecorationFocus)
 foreground=$(get_kde_color Colors:View ForegroundNormal)
 background=$(get_kde_color Colors:View BackgroundNormal)
 alternate=$(get_kde_color Colors:View BackgroundAlternate)
 inactive=$(get_kde_color Colors:View ForegroundInactive)
-selection=$(get_kde_color Colors:Selection BackgroundNormal)
+selection=$(get_kde_color Colors:Selection BackgroundAlternate)
 
 # prompt style
 set -o PROMPT_SUBST
@@ -63,14 +69,17 @@ prompt_natalie_setup() {
     # PS1='%K{$accent}%F{black}%~ %f%k%K{black}%F{$accent}%f%k ''
     # PS1=$'\n'"%~"$'\n'"%K{$accent} %k%F{$accent}%f "
     PS1='%F{$accent}%f '
-    RPROMPT='%~/'
+    RPROMPT='%~/%'
     RPROMPT+='$GITSTATUS_PROMPT'
 
 }
 prompt_themes+=( natalie )
 prompt natalie
 
-# script paths
+# stderr in red
+export LD_PRELOAD="/lib/libstderred.so${LD_PRELOAD:+:$LD_PRELOAD}"
+
+# executable paths
 export PATH="/home/natalie/.local/bin:$PATH"
 export PATH="/home/natalie/Dropbox/Code/Shell:$PATH"
 export PATH="/home/natalie/kde/src/kdesrc-build:$PATH"
@@ -83,8 +92,10 @@ function f () {
         cd "$1" && ls -1 -A -p --group-directories-first --color=auto
     elif [[ -f "$1" ]]
     then
-        # file: edit with nano
-        nano "$1"
+        # file: edit with micro
+        micro "$1"
+    else
+        cd "$1" 2>&1
     fi
 }
 
@@ -99,23 +110,23 @@ alias cp='cp -i'
 # aliases for shell scripts
 alias lpd='duplex_print_CLI.sh'
 alias replace='replace.py'
-alias backup-home='rsync -ahpvxAEHSWX --numeric-ids --progress --stats /home/natalie/ .'
-alias backup-root='sudo rsync -ahpvxAEHSWX --numeric-ids --progress --stats --exclude=/home --exclude=/media / .'
-alias kdesrc-build-kwin='~/kde/src/kdesrc-build/kdesrc-build --no-src --no-include-dependencies --debug kwin'
+alias backup-home='rsync -ahpvxAEHSWX --numeric-ids --progress --stats --exclude=.cache /home/natalie/ home/$(date +"%Y-%m-%d")'
+alias backup-root='sudo rsync -ahpvxAEHSWX --numeric-ids --progress --stats --exclude=home --exclude=media --exclude=var/temp --exclude=swapfile / root/$(date +"%Y-%m-%d")'
+alias kdesrc-build-debug='kdesrc-build --no-src --no-include-dependencies --debug'
+
+# aliases for programs
+alias kate='kate -n'
+
+# aliases for source-built plasma
 alias kdesrc-run-kwin_x11='emulate sh -c '\''source ~/kde/build/kwin/prefix.sh'\''; ~/kde/usr/bin/kwin_x11 --replace &'
 alias kdesrc-run-kwin_wayland='emulate sh -c '\''source ~/kde/build/kwin/prefix.sh'\''; ~/kde/usr/bin/kwin_wayland --replace &'
 alias kdesrc-run-plasma_x11='/home/natalie/kde/usr/lib/libexec/startplasma-dev.sh -x11'
 alias kdesrc-run-plasma_wayland='/home/natalie/kde/usr/lib/libexec/startplasma-dev.sh -wayland'
 
-# aliases for programs
-alias kate='kate -n'
-alias atom='atom -n'
-
 # aliases for pacman
 alias pacsearch='f() { yay -Ss $1 }; f'
 alias pacfind='f() { yay -Qs $1; yay -F $1 }; f'
-alias pacinstall='f() { sudo pacman -S $1 --noconfirm || yay -S $1 --noconfirm }; f'
-alias pacremove='f() { sudo pacman -R $1 }; f'
-alias pacdatabase='sudo pacman -Syy; yay -Syy'
-alias pacupgrade='yay -Syu --noconfirm'
-alias paccache='sudo paccache -rk 2'
+alias pacinstall='f() { sudo pacman -Syy; sudo pacman -S $1 --noconfirm || yay -S $1 --noconfirm }; f'
+alias pacuninstall='f() { sudo pacman -R $1 }; f'
+alias pacdatabase='sudo pacman -Syy'
+alias pacupgrade='yay -Syu --noconfirm; sudo paccache -rk 1'
