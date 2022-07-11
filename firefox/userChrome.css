@@ -4,7 +4,7 @@ scrollbox:not(#PlacesToolbarItems) {
 }
 
 /* tab labels centered in tab */
-.tab-label-container {
+/* .tab-label-container {
   display: grid;
   justify-items: safe center;
 }
@@ -15,44 +15,49 @@ scrollbox:not(#PlacesToolbarItems) {
   width: unset !important;
   padding-inline-start:  7px !important;
 }
+.tab-close-button
+{
+	width: unset !important;
+	padding-inline-start: 7px !important;
+} */
 
 /* margin above tab bar */
-#TabsToolbar {
-    margin-top: 2px!important
-}
+/* #TabsToolbar { */
+    /* margin-top: 2px!important */
+/* } */
 
 /* tab shape square */
-.tabbrowser-tab {
+/* .tabbrowser-tab {
     margin: 0px !important;
     margin-inline: 0px !important;
     padding-inline: 0px !important;
-    /* text-overflow: clip ellipsis clip 0 3ch; */
+    text-overflow: clip ellipsis clip 0 3ch;
 }
 .tab-background {
     margin: 0px !important;
     border-radius: 0 !important;
 }
 .tab-context-line {
-    /* margin-top: 26px !important; */
+    margin-top: 26px !important;
     margin-left: 6px !important;
     margin-right: 6px !important;
-}
+} */
 
 /* tab color */
-.tabbrowser-tab {
-    border-left: 1px solid rgb(255, 255, 255) !important;
-    border-right: 1px solid rgb(255, 255, 255) !important;
-}
+/* .tabbrowser-tab {
+    border-left: 1px solid #ffffff !important;
+    border-right: 1px solid #ffffff !important;
+} */
 .tab-background[selected] {
-    background-color: rgb(255, 255, 255) !important;
-    background-image: none !important;
-	border-top: 3px solid rgb(104, 108, 111) !important;
-    border-bottom: 1px solid rgb(150, 150, 150) !important;
+    /* background-color: #ffffff !important; */
+    /* background-image: none !important; */
+	border-top: 3px solid highlight !important;
+    /* border-bottom: 1px solid #969696 !important; */
 }
-.tabbrowser-tab:not([selected]) {
-	background-color: rgb(238, 240, 240) !important;
+/* .tabbrowser-tab:not([selected]) {
+	background-color: rgba(35, 38, 41, 0.2) !important;
     background-image: none !important;
 }
 .tabbrowser-tab:not([selected]) .tab-content{
     color: rgb(150, 150, 150) !important;
-}
+} */
