@@ -114,15 +114,6 @@ alias backup-home='rsync -ahpvxAEHSWX --numeric-ids --progress --stats --exclude
 alias backup-root='sudo rsync -ahpvxAEHSWX --numeric-ids --progress --stats --exclude=home --exclude=media --exclude=var/temp --exclude=swapfile / root/$(date +"%Y-%m-%d")'
 alias kompile='kdesrc-build --no-src --no-include-dependencies --debug'
 
-# aliases for programs
-alias kate='kate -n'
-
-# aliases for source-built plasma
-alias kdesrc-run-kwin_x11='emulate sh -c '\''source ~/kde/build/kwin/prefix.sh'\''; ~/kde/usr/bin/kwin_x11 --replace &'
-alias kdesrc-run-kwin_wayland='emulate sh -c '\''source ~/kde/build/kwin/prefix.sh'\''; ~/kde/usr/bin/kwin_wayland --replace &'
-alias kdesrc-run-plasma_x11='/home/natalie/kde/usr/lib/libexec/startplasma-dev.sh -x11'
-alias kdesrc-run-plasma_wayland='/home/natalie/kde/usr/lib/libexec/startplasma-dev.sh -wayland'
-
 # aliases for pacman
 alias pacsearch='f() { yay -Ss $1 }; f'
 alias pacfind='f() { yay -Qs $1; yay -F $1 }; f'
