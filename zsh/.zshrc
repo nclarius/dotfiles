@@ -107,13 +107,6 @@ function o () {
 alias rm='trash'
 alias cp='cp -i'
 
-# aliases for shell scripts
-alias lpd='duplex_print_CLI.sh'
-alias replace='replace.py'
-alias backup-home='rsync -ahpvxAEHSWX --numeric-ids --progress --stats --exclude=.cache /home/natalie/ home/$(date +"%Y-%m-%d")'
-alias backup-root='sudo rsync -ahpvxAEHSWX --numeric-ids --progress --stats --exclude=home --exclude=media --exclude=var/temp --exclude=swapfile / root/$(date +"%Y-%m-%d")'
-alias kompile='kdesrc-build --no-src --no-include-dependencies --debug'
-
 # aliases for pacman
 alias pacsearch='f() { yay -Ss $1 }; f'
 alias pacfind='f() { yay -Qs $1; yay -F $1 }; f'
@@ -121,3 +114,10 @@ alias pacinstall='f() { sudo pacman -Syy; sudo pacman -S $1 --noconfirm || yay -
 alias pacuninstall='f() { sudo pacman -R $1 }; f'
 alias pacdatabase='sudo pacman -Syy'
 alias pacupgrade='yay -Syu --noconfirm; sudo paccache -rk 1'
+
+# aliases for shell scripts
+alias lpd='duplex_print_CLI.sh'
+alias replace='replace.py'
+alias backup-home='rsync -ahpvxAEHSWX --numeric-ids --progress --stats --exclude=.cache /home/natalie/ home/$(date +"%Y-%m-%d")'
+alias backup-root='sudo rsync -ahpvxAEHSWX --numeric-ids --progress --stats --exclude=home --exclude=media --exclude=var/temp --exclude=swapfile / root/$(date +"%Y-%m-%d")'
+alias kompile='kdesrc-build --no-src --no-include-dependencies --debug'
