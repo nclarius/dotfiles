@@ -1242,8 +1242,8 @@ xkb_symbols "neoqwertz" {
     key <AD05> { [               w,          W,                caron, NoSymbol,                thorn,                THORN, NoSymbol, NoSymbol ] };
     key <AD06> { [               k,          K,            diaeresis, NoSymbol,                U0292,                U01B7, NoSymbol, NoSymbol ] };
     key <AD07> { [               h,          H,                breve, NoSymbol,           rightarrow,            leftarrow, NoSymbol, NoSymbol ] };
-    key <AD08> { [               g,          G,                tilde, NoSymbol,             idotless,                U26A5, NoSymbol, NoSymbol ] };
-    key <AD09> { [               f,          F,            abovering, NoSymbol,               oslash,               Oslash, NoSymbol, NoSymbol ] };
+    key <AD08> { [               g,          G,           asciitilde, NoSymbol,             idotless,                U26A5, NoSymbol, NoSymbol ] };
+    key <AD09> { [               f,          F,     dead_abovering, NoSymbol,               oslash,               Oslash, NoSymbol, NoSymbol ] };
     key <AD10> { [               q,          Q,             NoSymbol, NoSymbol,            downarrow,              uparrow, NoSymbol, NoSymbol ] };
     key <AD11> { [               j,          J,             NoSymbol, NoSymbol,                U2198,                U2197, NoSymbol, NoSymbol ] };
     key.type[Group1] = "EIGHT_LEVEL";
@@ -1256,7 +1256,7 @@ xkb_symbols "neoqwertz" {
     // output the U+263A smiley.
     key <AC01> { [               u,          U,            Multi_key, NoSymbol,             NoSymbol,             NoSymbol, NoSymbol, NoSymbol ] };
     key <AC02> { [               i,          I,              seconds, NoSymbol,                U017F,                U2211, NoSymbol, NoSymbol ] };
-    key <AC03> { [               a,          A,                 aring,   Aring,                  eth,                  ETH, NoSymbol, NoSymbol ] };
+    key <AC03> { [               a,          A,              aring,   Aring,                  eth,                  ETH, NoSymbol, NoSymbol ] };
     key <AC04> { [               e,          E,     ISO_Level5_Latch, NoSymbol,             NoSymbol,             NoSymbol, NoSymbol, NoSymbol ] };
     key <AC05> { [               o,          O,                U1E9E, NoSymbol,                U02BF,                U261B, NoSymbol, NoSymbol ] };
     key <AC06> { [               s,          S,             NoSymbol, NoSymbol,                U02BE,                U261A, NoSymbol, NoSymbol ] };
@@ -1271,7 +1271,7 @@ xkb_symbols "neoqwertz" {
     // fourth row
     key.type[Group1] = "EIGHT_LEVEL_ALPHABETIC";
     key <AB01> { [      udiaeresis, Udiaeresis,                U203A, NoSymbol,                U2423,                U23D1, NoSymbol, NoSymbol ] };
-    key <AB02> { [      odiaeresis, Odiaeresis,       guillemotright, NoSymbol,   doublelowquotemark,   singlelowquotemark, NoSymbol, NoSymbol ] };
+    key <AB02> { [      odiaeresis, Odiaeresis,        guillemotright, NoSymbol,   doublelowquotemark,   singlelowquotemark, NoSymbol, NoSymbol ] };
     key <AB03> { [      adiaeresis, Adiaeresis,                U202F, NoSymbol,                 cent,            copyright, NoSymbol, NoSymbol ] };
     key <AB04> { [               p,          P,        guillemotleft, NoSymbol,  leftdoublequotemark,  leftsinglequotemark, NoSymbol, NoSymbol ] };
     key <AB05> { [               z,          Z,                U2039, NoSymbol, rightdoublequotemark, rightsinglequotemark, NoSymbol, NoSymbol ] };
