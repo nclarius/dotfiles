@@ -8,3 +8,4 @@ Key map with a layout ‘neoqwertz’, which is [neo](https://neo-layout.org/) f
 
 1. Back  up your `/usr/share/X11/xkb/symbols/de` and `/usr/share/X11/xkb/rules/evdev.xml`.
 2. Insert the files provided here.
+
