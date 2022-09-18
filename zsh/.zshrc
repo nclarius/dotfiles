@@ -3,12 +3,6 @@
 # key bindings
 bindkey '^?'      backward-delete-char          # backspace delete one char backward
 bindkey '^[[3~'   delete-char                   # del        delete one char forward
-# bindkey '^[[A'    up-line-or-history            # up         last command
-# bindkey '^[[B'    down-line-or-history          # down       next command
-# bindkey '^[[D'    backward-char                 # left       move cursor one char backward
-# bindkey '^[[C'    forward-char                  # right      move cursor one char
-# bindkey '^[[5~'   up-line-or-history            # pg_up     move cursor one char backward
-# bindkey '^[[6~'   down-line-or-history          # pg_dn      move cursor one char forward
 bindkey '^[[H'    beginning-of-line             # home       go to the beginning of line
 bindkey '^[[F'    end-of-line                   # end        go to the end of line
 bindkey '^[[1;5C' forward-word                  # ctrl+right go forward one word
@@ -16,27 +10,33 @@ bindkey '^[[1;5D' backward-word                 # ctrl+left  go backward one wor
 bindkey '^H'      backward-kill-word            # ctrl+bs    delete previous word
 bindkey '^[[3;5~' kill-word                     # ctrl+del   delete next word
 bindkey '^J'      backward-kill-line            # ctrl+j     delete everything before cursor
+# bindkey '^[[A'    up-line-or-history            # up         last command
+# bindkey '^[[B'    down-line-or-history          # down       next command
+# bindkey '^[[D'    backward-char                 # left       move cursor one char backward
+# bindkey '^[[C'    forward-char                  # right      move cursor one char
+# bindkey '^[[5~'   up-line-or-history            # pg_up     move cursor one char backward
+# bindkey '^[[6~'   down-line-or-history          # pg_dn      move cursor one char forward  
 
 # auto completion
 # in-line suggestions
 source ~/Dropbox/Code/Shell/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 # source '/usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh'
 # fpath=('/usr/share/zsh/site-functons/'$fpath)
-# # tab completion
-# autoload -Uz +X compinit && compinit
-# autoload -Uz +X bashcompinit && bashcompinit
-# # arrow key driven completion menu
-# zstyle ':completion:*' menu select
-# # case insensitive completion
-# zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*'
-# # sudo completion
-# zstyle ':completion::complete:*' gain-privileges 1
+# tab completion
+autoload -Uz +X compinit && compinit
+autoload -Uz +X bashcompinit && bashcompinit
+# case insensitive completion
+zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*'
+# sudo completion
+zstyle ':completion::complete:*' gain-privileges 1
+# completion category headings style
+zstyle ':completion:*' format '%F{green}- %d -%f'
 
 # history shared across sessions
-# export HISTFILE=~/.zsh_history
-# export HISTSIZE=1000
-# export SAVEHIST=1000
-# setopt INC_APPEND_HISTORY
+export HISTFILE=~/.zsh_history
+export HISTSIZE=1000
+export SAVEHIST=1000
+setopt INC_APPEND_HISTORY
 # setopt SHARE_HISTORY
 # setopt appendhistory
 
@@ -76,7 +76,6 @@ prompt_natalie_setup() {
     # PS1='%F{$accent}%f '
     RPROMPT='%~/%'
     RPROMPT+='$GITSTATUS_PROMPT'
-
 }
 prompt_themes+=( natalie )
 prompt natalie
@@ -118,12 +117,12 @@ preexec_functions+=(__prompt_preexec)
 precmd_functions+=(__prompt_precmd)
 
 # executable paths
-export PATH="/home/natalie/.local/bin:$PATH"
-export PATH="/home/natalie/Dropbox/Code/Shell:$PATH"
-export PATH="/home/natalie/kde/src/kdesrc-build:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/Dropbox/Code/Shell:$PATH"
 
 # functions and aliases for file operations
-function f () {
+function f () # go to file or directory
+{
     if [[ -d "$1" ]]
     then
         # directory: enter and list contents
@@ -136,7 +135,8 @@ function f () {
         cd "$1" 2>&1
     fi
 }
-function o () {
+function o () # open file externally
+{
   xdg-open "$@">/dev/null 2>&1
 }
 alias rm='trash'
@@ -155,4 +155,31 @@ alias lpd='duplex_print_CLI.sh'
 alias replace='replace.py'
 alias backup-home='rsync -ahpvxAEHSWX --numeric-ids --progress --stats --exclude=.cache /home/natalie/ home/$(date +"%Y-%m-%d")'
 alias backup-root='sudo rsync -ahpvxAEHSWX --numeric-ids --progress --stats --exclude=home --exclude=media --exclude=var/temp --exclude=swapfile / root/$(date +"%Y-%m-%d")'
-alias kompile='kdesrc-build --no-src --no-include-dependencies --debug'
+
+# kdesrc-build
+export PATH="$HOME/kde/src/kdesrc-build:$PATH"
+function kompile
+{
+    kdesrc-build --no-src --no-include-dependencies --debug $1
+}
+function _comp_kdesrcbuild  # completion for kdesrc-build
+{
+  local cur="${COMP_WORDS[COMP_CWORD]}" # get current word
+  local modules=$(ls $HOME/kde/src) # get src modules
+  local parameters=$(case "$cur" in -*) echo "--async --help --version -v --show-info --initial-setup --author --color --nice= --no-async --no-color --pretend -p --quiet -q --really-quiet --verbose --src-only --build-only --install-only --metadata-only --rebuild-failures --include-dependencies --no-include-dependencies --ignore-modules --no-src --no-build --no-metadata --no-install --no-build-when-unchanged --force-build --debug --query= --no-rebuild-on-fail --refresh-build --reconfigure --resume-from --resume-after --resume --stop-before --stop-after --stop-on-failure --rc-file --print-modules --list-build --dependency-tree --run --build-system-only --install --no-snapshots --delete-my-patches --delete-my-settings --set-module-option-value=";; esac) # define available options
+  COMPREPLY=( $(compgen -W "$parameters $modules" -- $cur) ) # return completions matching the current word
+  return 0
+}
+complete -o nospace -F _comp_kdesrcbuild kdesrc-build
+complete -o nospace -F _comp_kdesrcbuild kompile
+
+function _comp_kdesrcrun # completion for kdesrc-run 
+{
+  local cur="${COMP_WORDS[COMP_CWORD]}" # get current word
+  if [[ $COMP_CWORD != 1 ]]; then return 0; fi # complete only first arg
+  local modules=$(kdesrc-run --list-installed) # get installed modules
+  local parameters=$(case "$cur" in -*) echo "-e --exec -f --fork -q --quiet -h --help --list-installed";; esac) # define available options
+  COMPREPLY=( $(compgen -W "$parameters ${modules}" -- "$cur") ) # return completions matching the current word
+  return 0
+}
+complete -o nospace -F _comp_kdesrcrun kdesrc-run
