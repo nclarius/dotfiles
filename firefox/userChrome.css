@@ -4,60 +4,71 @@ scrollbox:not(#PlacesToolbarItems) {
 }
 
 /* tab labels centered in tab */
-/* .tab-label-container {
-  display: grid;
-  justify-items: safe center;
+.tab-content {
+    display: flex !important; 
+    justify-content: center !important;
+    align-items: center !important;
+    padding-right: 6px !important;
+    text-overflow: hidden;
 }
-.tab-text.tab-label{
-  overflow:hidden;
+.tab-label-container {
+    margin: auto !important;
+    text-overflow: hidden;
 }
-.tab-label-container:not([textoverflow]) + .tab-close-button {
-  width: unset !important;
-  padding-inline-start:  7px !important;
+.tabbrowser-tab {
+    overflow-x: hidden;
 }
-.tab-close-button
-{
-	width: unset !important;
-	padding-inline-start: 7px !important;
-} */
+.tabbrowser-tab:not([labelendaligned], :hover) > .tab-stack > .tab-content > .tab-close-button {
+    padding-inline-start: 7px !important;
+    width: 24px !important;
+}
+.tab-close-button:hover {
+    border: 1px solid GrayText !important;
+}
 
-/* margin above tab bar */
-/* #TabsToolbar { */
-    /* margin-top: 2px!important */
-/* } */
-
-/* tab shape square */
-/* .tabbrowser-tab {
+/* tab shape rectangular */
+#TabsToolbar {
+    margin-top: 2px!important
+}
+.tabbrowser-tab {
     margin: 0px !important;
     margin-inline: 0px !important;
     padding-inline: 0px !important;
-    text-overflow: clip ellipsis clip 0 3ch;
 }
 .tab-background {
     margin: 0px !important;
     border-radius: 0 !important;
 }
 .tab-context-line {
-    margin-top: 26px !important;
     margin-left: 6px !important;
     margin-right: 6px !important;
-} */
+}
 
 /* tab color */
-/* .tabbrowser-tab {
-    border-left: 1px solid #ffffff !important;
-    border-right: 1px solid #ffffff !important;
-} */
-.tab-background[selected] {
-    /* background-color: #ffffff !important; */
-    /* background-image: none !important; */
-	border-top: 3px solid highlight !important;
-    /* border-bottom: 1px solid #969696 !important; */
-}
-/* .tabbrowser-tab:not([selected]) {
-	background-color: rgba(35, 38, 41, 0.2) !important;
+.tab-background {
     background-image: none !important;
+    box-shadow: none !important;
 }
-.tabbrowser-tab:not([selected]) .tab-content{
-    color: rgb(150, 150, 150) !important;
-} */
+.tab-background[selected] {
+    background-color: Field !important;
+	border-top: 3px solid AccentColor !important;
+}
+@media (prefers-color-scheme: light) {
+    .tabbrowser-tab:not([selected]) {
+        background-color: rgba(0, 0, 0, 0.2) !important;
+    }
+    .tabbrowser-tab:not([selected]) .tab-content{
+        color: rgb(100, 100, 100) !important;
+    }
+}
+@media (prefers-color-scheme: dark) {
+    .tabbrowser-tab:not([selected]) {
+        background-color: rgba(0, 0, 0, 0.35) !important;
+    }
+    .tabbrowser-tab:not([selected]) .tab-content{
+        color: rgb(140, 140, 140) !important;
+    }
+}
+.tab-label-container[textoverflow]:not([pinned]) {
+    mask-image: unset !important;
+}
