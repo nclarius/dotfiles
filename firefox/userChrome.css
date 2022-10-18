@@ -13,10 +13,8 @@ scrollbox:not(#PlacesToolbarItems) {
 }
 .tab-label-container {
     margin: auto !important;
-    text-overflow: hidden;
-}
-.tabbrowser-tab {
-    overflow-x: hidden;
+    max-width: 165px;
+    text-overflow: ellipsis;
 }
 .tabbrowser-tab:not([labelendaligned], :hover) > .tab-stack > .tab-content > .tab-close-button {
     padding-inline-start: 7px !important;
