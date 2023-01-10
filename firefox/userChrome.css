@@ -47,6 +47,20 @@ scrollbox:not(#PlacesToolbarItems) {
 }
 
 /* tab color */
+@media (prefers-color-scheme: light) {
+    :root {
+        --gray: rgb(140, 140, 140);
+        --inactivebg: rgba(0, 0, 0, 0.175);
+        --inactivefg: rgb(140, 140, 140);
+    }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --gray: rgb(190,190,190);
+        --inactivebg: rgba(0, 0, 0, 0.175);
+        --inactivefg: rgb(30, 30, 30);
+    }
+}
 .tab-background {
     background-image: none !important;
     box-shadow: none !important;
@@ -54,29 +68,12 @@ scrollbox:not(#PlacesToolbarItems) {
 .tab-background[selected] {
     background-color: Field !important;
 	border-top: 3px solid AccentColor !important;
+    border-left: 1px solid var(--gray);
+    border-right: 1px solid var(--gray);
 }
-@media (prefers-color-scheme: light) {
-    .tab-background[selected] {
-        border-bottom: 1px solid rgb(140, 140, 140) !important;
-    }
-    .tabbrowser-tab:not([selected]) {
-        background-color: rgba(0, 0, 0, 0.175) !important;
-    }
-    .tabbrowser-tab:not([selected]) .tab-content{
-        color: rgb(140, 140, 140) !important;
-    }
-} 
-@media (prefers-color-scheme: dark) {
-    .tab-background[selected] {
-        border-bottom: 1px solid rgb(30, 30, 30) !important;
-    }
-    .tabbrowser-tab:not([selected]) {
-        background-color: rgba(0, 0, 0, 0.175) !important;
-    }
-    .tabbrowser-tab:not([selected]) .tab-content{
-        color: rgb(190,190,190) !important;
-    }
+.tabbrowser-tab:not([selected]) {
+    background-color: var(--inactivebg) !important;
 }
-.tab-label-container[textoverflow]:not([pinned]) {
-    mask-image: unset !important;
+.tabbrowser-tab:not([selected]) .tab-content{
+    color: var(--inactivefg) !important;
 }
