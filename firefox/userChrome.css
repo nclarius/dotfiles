@@ -3,7 +3,7 @@
 #alltabs-button {
     display: none !important;
 }
-scrollbox:not(#PlacesToolbarItems) {
+scrollbox[orient="horizontal"] {
     -moz-box-pack: center !important;
 }
 
@@ -60,6 +60,9 @@ scrollbox:not(#PlacesToolbarItems) {
         --inactivebg: rgba(0, 0, 0, 0.175);
         --inactivefg: rgb(190,190,190);
     }
+}
+#nav-bar, #nav-bar > * {
+    background-color: Field !important;
 }
 .tab-background {
     background-image: none !important;
