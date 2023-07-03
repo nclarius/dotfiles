@@ -156,7 +156,7 @@ function o () # open file externally
   xdg-open "$@">/dev/null 2>&1
 }
 alias cp='cp -i'
-# alias rm='trash'
+alias rm='trash'
 
 # aliases for pacman
 alias pacsearch='yay -Ss'
@@ -232,7 +232,7 @@ alias backup-home='rsync -ahpvxAEHSWX --numeric-ids --progress --stats --exclude
 alias backup-root='sudo rsync -ahpvxAEHSWX --numeric-ids --progress --stats --exclude=home --exclude=media --exclude=var/temp --exclude=swapfile / root/$(date +"%Y-%m-%d")'
 
 # other aliases
-alias driver-libinput='sudo mv /etc/X11/xorg.conf.d/70-synaptics.conf /etc/X11/xorg.conf.d/30-synaptics.conf; sudo mv /usr/share/X11/xorg.conf.d/70-synaptics.conf /usr/share/X11/xorg.conf.d/30-synaptics.conf'
-alias driver-synaptics='sudo mv /etc/X11/xorg.conf.d/30-synaptics.conf /etc/X11/xorg.conf.d/70-synaptics.conf'
-# /usr/share/X11/xorg.conf.d/
+alias touchpaddriver-libinput='sudo mv /etc/X11/xorg.conf.d/70-synaptics.conf /etc/X11/xorg.conf.d/30-synaptics.conf; sudo mv /usr/share/X11/xorg.conf.d/70-synaptics.conf /usr/share/X11/xorg.conf.d/30-synaptics.conf'
+alias touchpaddriver-synaptics='sudo mv /etc/X11/xorg.conf.d/30-synaptics.conf /etc/X11/xorg.conf.d/70-synaptics.conf'
+alias grep='grep --color=always'
 alias zonfig='micro ~/.zshrc'
