@@ -1,14 +1,19 @@
-/* tabs centered in tab bar */
+/* hide extra buttons */
 #firefox-view-button,
 #alltabs-button {
     display: none !important;
 }
-scrollbox[orient="horizontal"] {
-    -moz-box-pack: center !important;
+#tabbrowser-arrowscrollbox:not([overflowing]){
+ --uc-flex-justify: center; 
+}
+
+/* tabs centered in tab bar */
+scrollbox[orient="horizontal"]{
+  justify-content: var(--uc-flex-justify,initial);
 }
 
 /* tab labels centered in tab */
-.tab-content {
+/*.tab-content {
     display: flex !important; 
     justify-content: center !important;
     align-items: center !important;
@@ -26,7 +31,9 @@ scrollbox[orient="horizontal"] {
 }
 .tab-close-button:hover {
     border: 1px solid borderText !important;
-}
+}*/
+
+
 
 /* tab shape rectangular */
 #TabsToolbar {
@@ -46,7 +53,7 @@ scrollbox[orient="horizontal"] {
     margin-right: 6px !important;
 }
 
-/* tab color */
+/* color */
 @media (prefers-color-scheme: light) {
     :root {
         --border: rgb(140, 140, 140);
@@ -60,6 +67,9 @@ scrollbox[orient="horizontal"] {
         --inactivebg: rgba(0, 0, 0, 0.175);
         --inactivefg: rgb(190,190,190);
     }
+}
+#titlebar {
+	background-color: InactiveCaption !important;
 }
 #nav-bar, #nav-bar > * {
     background-color: Field !important;
