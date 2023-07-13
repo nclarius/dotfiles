@@ -133,16 +133,17 @@ export PATH="$HOME/Dropbox/Code/Shell:$PATH"
 export PATH="$HOME/kde/src/kdesrc-build:$PATH"
 
 # functions and aliases for file operations
+alias ls='ls -A -F --group-directories-first -1'
 function f () # go to file or directory
 {
     if [[ -z "$1" ]]
     then
         # no argument/current directory: list contents
-        ls -A -p --group-directories-first
+        ls
     elif [[ -d "$1" ]]
     then
         # directory: enter and list contents
-        cd "$1" && ls -A -p --group-directories-first
+        cd "$1" && ls
     elif [[ -f "$1" ]]
     then
         # file: edit with micro
@@ -159,8 +160,10 @@ alias cp='cp -i'
 alias rm='trash'
 
 # aliases for pacman
+alias pacinfo='pacman -Qi'
 alias pacsearch='yay -Ss'
 alias pacfind='yay -Qs'
+alias pacfile='yay -F'
 alias pacinstall='sudo pacman -Sy; yay -S --noconfirm --sudoloop'
 alias pacuninstall='sudo pacman -Sy; sudo pacman -R'
 alias pacdatabase='sudo pacman -Sy'
@@ -180,7 +183,7 @@ alias kde5src-build='kdesrc-build --rc-file=/home/natalie/.config/kde5src-buildr
 alias kdesrc-build='kdesrc-build --rc-file=/home/natalie/.config/kde6src-buildrc'
 function kompile()
 {
-    command="kdesrc-build --rc-file=/home/natalie/.config/kde6src-buildrc --no-src --no-include-dependencies"
+    command="kdesrc-build --rc-file=/home/natalie/.config/kdesrc-buildrc --no-src --no-include-dependencies"
     for arg in "$@"; do
         # replace "." with current directory name
         module=$([ "$arg" = "." ] && echo "${arg/\./"${PWD##*/}"}" || echo "$arg")
@@ -235,4 +238,5 @@ alias backup-root='sudo rsync -ahpvxAEHSWX --numeric-ids --progress --stats --ex
 alias touchpaddriver-libinput='sudo mv /etc/X11/xorg.conf.d/70-synaptics.conf /etc/X11/xorg.conf.d/30-synaptics.conf; sudo mv /usr/share/X11/xorg.conf.d/70-synaptics.conf /usr/share/X11/xorg.conf.d/30-synaptics.conf'
 alias touchpaddriver-synaptics='sudo mv /etc/X11/xorg.conf.d/30-synaptics.conf /etc/X11/xorg.conf.d/70-synaptics.conf'
 alias grep='grep --color=always'
+alias procgrep='ps aux | grep -i'
 alias zonfig='micro ~/.zshrc'
