@@ -59,10 +59,10 @@ fpath=(/usr/share/zsh/site-functions/ $fpath)
 # completion for all files
 alias completions='source /home/natalie/Dropbox/Code/Shell/generate_zsh_completions.sh'
 # completion for kdesrc-build
-fpath=(/home/natalie/kde6/src/kdesrc-build/completions/zsh $fpath)
+fpath=(/home/natalie/kde/src/kdesrc-build/completions/zsh $fpath)
 compdef _kdesrc-build kdesrc-build
 compdef _kdesrc-build kompile
-#source /home/natalie/kde6/src/kdesrc-build/completions/zsh/_kdesrc-build 2>/dev/null
+#source /home/natalie/kde/src/kdesrc-build/completions/zsh/_kdesrc-build 2>/dev/null
 function _comp_kdesrc-build
 {
   local cur
@@ -71,7 +71,7 @@ function _comp_kdesrc-build
   # Retrieve source modules through kde/build
   # If the exit status indicates failure, set the wordlist empty to avoid unrelated messages
   local modules
-  if ! modules=$(ls $HOME/kde6/build); then modules=""; fi
+  if ! modules=$(ls $HOME/kde/build); then modules=""; fi
   # Return completions that match the current word
   COMPREPLY=( $(compgen -W "${modules}" -- "$cur") )
   return 0
@@ -175,18 +175,20 @@ alias pacupgradable='yay -Sy && yay -Qu && echo $(yay -Qu | wc -l) "packages to 
 alias komparediff='kompare -o -'
 function kode()
 {
-    module=$([ "$arg" = "." ] && echo "${arg/\./"${PWD##*/}"}" || echo "$arg")
-    code "/home/natalie/kde6/src/$module"
+    module=$([ "$arg" = "." ] && echo "${arg/\./"$( basename $( git rev-parse --show-toplevel ) )"}" || echo "$arg")
+    code "/home/natalie/kde/src/$module"
 
 }
-alias kde5src-build='kdesrc-build --rc-file=/home/natalie/.config/kde5src-buildrc'
-alias kdesrc-build='kdesrc-build --rc-file=/home/natalie/.config/kde6src-buildrc'
+alias kdesrc-build='kdesrc-build --rc-file=/home/natalie/.config/kdesrc-buildrc'
+alias kdesrc-build-5='kdesrc-build --rc-file=/home/natalie/.config/kde5src-buildrc'
+alias kdesrc-build-plasma='kdesrc-build --include-dependencies plasma-workspace plasma-framework plasma-integration bluedevil powerdevil plasma-nm plasma-pa plasma-thunderbolt plasma-vault plasma-firewall plasma-workspace-wallpapers kdeplasma-addons krunner milou kwin kscreen sddm-kcm plymouth-kcm breeze discover print-manager plasma-sdk kdeconnect-kde plasma-browser-integration xdg-desktop-portal-kde kde-gtk-config kgamma5 breeze-gtk drkonqi phonon flatpak-kcm kactivitymanagerd plasma-desktop systemsettings plasma-disks plasma-systemmonitor ksystemstats kinfocenter kmenuedit'
+alias kdesrc-install-plasma='~/kde/build/plasma-workspace/login-sessions/install-sessions.sh'
 function kompile()
 {
     command="kdesrc-build --rc-file=/home/natalie/.config/kdesrc-buildrc --no-src --no-include-dependencies"
     for arg in "$@"; do
         # replace "." with current directory name
-        module=$([ "$arg" = "." ] && echo "${arg/\./"${PWD##*/}"}" || echo "$arg")
+        module=$([ "$arg" = "." ] && echo "${arg/\./"$( basename $( git rev-parse --show-toplevel ) )"}" || echo "$arg")
         option="$module"
         command="$command $option"
     done
@@ -198,8 +200,8 @@ function kdesrc-install()
 {
     command="ninja"
     for arg in "$@"; do
-        module=$([ "$arg" = "." ] && echo "${arg/\./"${PWD##*/}"}" || echo "$arg")
-        option=$([[ -d "/home/natalie/kde6/build/$module" ]] && echo "-C /home/natalie/kde6/build/$module install" || echo "$arg")
+        module=$([ "$arg" = "." ] && echo "${arg/\./"$( basename $( git rev-parse --show-toplevel ) )"}" || echo "$arg")
+        option=$([[ -d "/home/natalie/kde/build/$module" ]] && echo "-C /home/natalie/kde/build/$module install" || echo "$arg")
         command="$command $option"
     done
     eval "$command"
@@ -208,8 +210,8 @@ function kdesrc-test()
 {
     command="ctest --verbose --output-on-failure --timeout 30"
     for arg in "$@"; do
-        module=$([ "$arg" = "." ] && echo "${arg/\./"${PWD##*/}"}" || echo "$arg")
-        option=$([[ -d "/home/natalie/kde6/build/$module" ]] && echo "--test-dir /home/natalie/kde/build/$module" || echo "$arg")
+        module=$([ "$arg" = "." ] && echo "${arg/\./"$( basename $( git rev-parse --show-toplevel ) )"}" || echo "$arg")
+        option=$([[ -d "/home/natalie/kde/build/$module" ]] && echo "--test-dir /home/natalie/kde/build/$module" || echo "$arg")
         command="$command $option"
     done
     command="rainbow --green=PASS --red=FAIL! $command"
@@ -217,6 +219,40 @@ function kdesrc-test()
 }
 alias konfirm='kdesrc-test'
 # konfirm -R 'testPlacement' kwin
+function kdesrc-mr()
+{
+    MR=$1
+    REPO=$( basename $( git rev-parse --show-toplevel ) )
+
+    # Check out the latest master to get a clean state
+    git checkout master
+    git pull
+
+    # Delete an existing branch if present, so we can check out the latest version of the MR
+    git branch --delete "mr/$MR"
+    git mr "$MR"
+    # We are now on a branch named "mr/[number] that is based on some base branch
+
+    # Rebase it on current master, or else die trying
+    git pull --rebase origin master
+    if [ $? -ne 0 ]; then
+        echo "ERROR: $REPO !$MR does not cleanly rebase. Undoing the rebase and testing from its older state." | rainbow --red="ERROR"
+        git rebase --abort
+    fi
+
+    # Build it!
+    kdesrc-build --no-src --no-include-dependencies $REPO
+
+    # Handle errors
+    ERRORFILE=~/kde/src/log/latest/$REPO/error.log
+    if [ -f $ERRORFILE ]
+    then
+        cat $ERRORFILE
+        false
+    else
+        source ../../build/$REPO/prefix.sh
+    fi
+}
 
 # aliases for session management
 alias ksm-logout='qdbus org.kde.Shutdown /Shutdown org.kde.Shutdown.logout'
