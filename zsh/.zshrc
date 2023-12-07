@@ -8,6 +8,8 @@ function get_kde_color() {
     echo $color
 }
 accent=$(get_kde_color General AccentColor) && [[  $accent != "#000000" ]] || accent=$(get_kde_color Colors:View DecorationFocus)
+red='\033[0;31m'
+fg='\033[0m'
 _prompt_executing=""
 function __prompt_precmd() {
     local ret="$?"
@@ -39,7 +41,7 @@ precmd_functions+=(__prompt_precmd)
 
 # completion
 # completion menu
-source ~/Dropbox/Code/Shell/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+source /usr/share/zsh/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 # tab completion
 autoload -Uz +X compinit && compinit
 autoload -Uz +X bashcompinit && bashcompinit
@@ -55,29 +57,11 @@ setopt autocd
 # completion sources
 #source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 #fpath=(/usr/local/share/zsh-completions $fpath)
-fpath=(/usr/share/zsh/site-functions/ $fpath)
+# fpath=(/usr/share/zsh/site-functions/ $fpath)
+# fpath=(/home/natalie/kde/src/kdesrc-build/completions/zsh $fpath)
+# #source /home/natalie/kde/src/kdesrc-build/completions/zsh/_kdesrc-build 2>/dev/null
 # completion for all files
 alias completions='source /home/natalie/Dropbox/Code/Shell/generate_zsh_completions.sh'
-# completion for kdesrc-build
-fpath=(/home/natalie/kde/src/kdesrc-build/completions/zsh $fpath)
-compdef _kdesrc-build kdesrc-build
-compdef _kdesrc-build kompile
-#source /home/natalie/kde/src/kdesrc-build/completions/zsh/_kdesrc-build 2>/dev/null
-function _comp_kdesrc-build
-{
-  local cur
-  COMPREPLY=()
-  cur="${COMP_WORDS[COMP_CWORD]}"
-  # Retrieve source modules through kde/build
-  # If the exit status indicates failure, set the wordlist empty to avoid unrelated messages
-  local modules
-  if ! modules=$(ls $HOME/kde/build); then modules=""; fi
-  # Return completions that match the current word
-  COMPREPLY=( $(compgen -W "${modules}" -- "$cur") )
-  return 0
-}
-complete -o nospace -F _comp_kdesrc-build kdesrc-test
-complete -o nospace -F _comp_kdesrc-build kdesrc-install
 
 # history
 export HISTFILE=~/.zsh_history
@@ -101,23 +85,23 @@ bindkey '^J'      backward-kill-line     # ctrl+j         delete everything befo
 #bindkey '^[[A'    up-line-or-history     # up             go to previous command in history
 #bindkey '^[[B'    down-line-or-history   # down           go to next command in history
 #bindkey '^[[5~'   up-line-or-history     # pg_up          move cursor one char backward
-#bindkey '^[[6~'   down-line-or-history   # pg_dn          move cursor one char forward  
+#bindkey '^[[6~'   down-line-or-history   # pg_dn          move cursor one char forward
 
 # never beep
 setopt NO_BEEP
 
 # syntax highlighting
 source '/usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh'
-# stderr in red
-export LD_PRELOAD="/lib/libstderred.so${LD_PRELOAD:+:$LD_PRELOAD}"
+# stderr output in red
+export LD_PRELOAD="/usr/lib/libstderred.so${LD_PRELOAD:+:$LD_PRELOAD}"
 
 # vscode integration
 [[ "$TERM_PROGRAM" == "vscode" ]] && . "$(code --locate-shell-integration-path zsh)"
 
 # git status
 autoload -Uz vcs_info
-precmd() { 
-    vcs_info 
+precmd() {
+    vcs_info
 }
 zstyle ':vcs_info:git:*' formats ':%b'
 source '/usr/share/zsh/plugins/zsh-gitstatus/gitstatus.prompt.zsh'
@@ -132,8 +116,11 @@ export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/Dropbox/Code/Shell:$PATH"
 export PATH="$HOME/kde/src/kdesrc-build:$PATH"
 
+# make sudo work with aliases
+alias sudo='sudo '
+
 # functions and aliases for file operations
-alias ls='ls -A -F --group-directories-first -1'
+alias ls='ls -A --file-type -h -v --group-directories-first -1'
 function f () # go to file or directory
 {
     if [[ -z "$1" ]]
@@ -149,15 +136,42 @@ function f () # go to file or directory
         # file: edit with micro
         micro "$1"
     else
-        cd "$1" 2>&1
+        cd "$1" 2>&1 || return
     fi
 }
 function o () # open file externally
 {
   xdg-open "$@">/dev/null 2>&1
 }
-alias cp='cp -i'
-alias rm='trash'
+alias cp='cp -i -r'
+alias mkdir='mkdir -p'
+function touchp() { if [[ "$1" == */* ]]; then if [ ! -d "${1%/*}/" ]; then mkdir -p "${1%/*}/"; fi; fi; touch "$1" }
+alias touch='touchp'
+function cpr() # copy file including parent dirs from source to destination
+{
+	if [ "$#" -ne 3 ]; then echo "cpr: usage: cpr source-dir file-to-copy destination-dir" >&2; return 1; fi
+	if [ ! -d "$1" ]; then echo "${red}cpr: source directory does not exist${fg}" >&2; return 1; fi
+	if [ ! -e "$1/$2" ]; then echo "${red}cpr: file to copy does not exist${fg}" >&2; return 1; fi
+	if [ ! -d "$3" ]; then echo "${red}cpr: destination directory does not exist${fg}" >&2; return 1; fi
+	[[ "$1" == /* ]] && srcdir="$1" || srcdir=$(cd "$(pwd)/$1"; pwd)
+	[[ "$3" == /* ]] && destdir="$3" || destdir=$(cd "$(pwd)/$3"; pwd)
+	[[ "$2" == */* ]] && cpdir="${2%/*}/" || cpdir=""
+	if [ ! -d "$destdir/$cpdir" ]; then mkdir -p "$destdir/$cpdir"; fi
+	cp -i -r "$1/$2" "$3/$cpdir"
+}
+function mvr() # move file including parent dirs from source to destination
+{
+	if [ "$#" -ne 3 ]; then echo "mvr: usage: mvr source-dir file-to-move destination-dir" >&2; return 1; fi
+	if [ ! -d "$1" ]; then echo "${red}mvr: source directory does not exist${fg}" >&2; return 1; fi
+	if [ ! -e "$1/$2" ]; then echo "${red}mvr: file to move does not exist${fg}" >&2; return 1; fi
+	if [ ! -d "$3" ]; then echo "${red}mvr: destination directory does not exist${fg}" >&2; return 1; fi
+	[[ "$1" == /* ]] && srcdir="$1" || srcdir=$(cd "$(pwd)/$1"; pwd)
+	[[ "$3" == /* ]] && destdir="$3" || destdir=$(cd "$(pwd)/$3"; pwd)
+	[[ "$2" == */* ]] && mvdir="${2%/*}/" || mvdir=""
+	if [ ! -d "$destdir/$mvdir" ]; then mkdir -p "$destdir/$mvdir"; fi
+	mv -i "$1/$2" "$3/$mvdir"
+}
+# alias rm='trash -r'
 
 # aliases for pacman
 alias pacinfo='pacman -Qi'
@@ -166,92 +180,92 @@ alias pacfind='yay -Qs'
 alias pacfile='yay -F'
 alias pacinstall='sudo pacman -Sy; yay -S --noconfirm --sudoloop'
 alias pacuninstall='sudo pacman -Sy; sudo pacman -R'
-alias pacdatabase='sudo pacman -Sy'
-alias pacupgrade='sudo pacman -Syu --noconfirm --disable-download-timeout --ignore=network-manager-sstp && sudo paccache -r -k 1 && paccache -r -c ~/.cache/yay'
-alias pacupgradeall='yay -Syu --noconfirm --sudoloop; flatpak update --noninteractive; rm -r ~/.cache/yay'
+alias pacupdatabase='sudo pacman -Sy; sudo pacman -Fy'
 alias pacupgradable='yay -Sy && yay -Qu && echo $(yay -Qu | wc -l) "packages to upgrade"'
+alias pacupgrade='xdotool key "ctrl+shift+i"; sudo pacman -Fy; sudo pacman -Syu --noconfirm --disable-download-timeout --ignore=network-manager-sstp,pipewire,libpipewire && sudo paccache -r -k 1 && paccache -r -c ~/.cache/yay; notify-send "System upgrade finished" -a "pacman" -i update-none; xdotool key "ctrl+shift+i"'
+alias pacupgradeall='xdotool key "ctrl+shift+i"; sudo pacman -Fy; yay -Syu --noconfirm --sudoloop --disable-download-timeout --ignore=network-manager-sstp,pipewire && sudo flatpak update --noninteractive &&rm -r ~/.cache/yay; notify-send "System upgrade finished" -a "pacman" -i update-none; xdotool key "ctrl+shift+i"'
 
 # aliases for kdesrc-build
-alias komparediff='kompare -o -'
 function kode()
 {
-    module=$([ "$arg" = "." ] && echo "${arg/\./"$( basename $( git rev-parse --show-toplevel ) )"}" || echo "$arg")
+    module=$([ "$arg" = "." ] && echo "${arg/\./"$(basename $(git rev-parse --show-toplevel))"}" || echo "$arg")
     code "/home/natalie/kde/src/$module"
-
 }
-alias kdesrc-build='kdesrc-build --rc-file=/home/natalie/.config/kdesrc-buildrc'
-alias kdesrc-build-5='kdesrc-build --rc-file=/home/natalie/.config/kde5src-buildrc'
-alias kdesrc-build-plasma='kdesrc-build --include-dependencies plasma-workspace plasma-framework plasma-integration bluedevil powerdevil plasma-nm plasma-pa plasma-thunderbolt plasma-vault plasma-firewall plasma-workspace-wallpapers kdeplasma-addons krunner milou kwin kscreen sddm-kcm plymouth-kcm breeze discover print-manager plasma-sdk kdeconnect-kde plasma-browser-integration xdg-desktop-portal-kde kde-gtk-config kgamma5 breeze-gtk drkonqi phonon flatpak-kcm kactivitymanagerd plasma-desktop systemsettings plasma-disks plasma-systemmonitor ksystemstats kinfocenter kmenuedit'
-alias kdesrc-install-plasma='~/kde/build/plasma-workspace/login-sessions/install-sessions.sh'
+alias kdesrc-build='xdotool key "ctrl+shift+o"; xdotool key "ctrl+shift+d";  kde-inhibit --power kdesrc-build'
+alias kdesrc-build-5='xdotool key "ctrl+shift+o"; xdotool key "ctrl+shift+d"; kdesrc-build --rc-file=/home/natalie/.config/kde5src-buildrc'
 function kompile()
 {
-    command="kdesrc-build --rc-file=/home/natalie/.config/kdesrc-buildrc --no-src --no-include-dependencies"
+    command="kdesrc-build --no-src --no-include-dependencies"
     for arg in "$@"; do
         # replace "." with current directory name
-        module=$([ "$arg" = "." ] && echo "${arg/\./"$( basename $( git rev-parse --show-toplevel ) )"}" || echo "$arg")
+        module=$([ "$arg" = "." ] && echo "${arg/\./"$(basename $(git rev-parse --show-toplevel))"}" || echo "$arg")
         option="$module"
         command="$command $option"
     done
     command="rainbow --red=error: $command"
     eval "$command"
 }
+compdef _kdesrc-build kompile
 
 function kdesrc-install()
 {
     command="ninja"
     for arg in "$@"; do
-        module=$([ "$arg" = "." ] && echo "${arg/\./"$( basename $( git rev-parse --show-toplevel ) )"}" || echo "$arg")
+        module=$([ "$arg" = "." ] && echo "${arg/\./"$(basename $(git rev-parse --show-toplevel))"}" || echo "$arg")
         option=$([[ -d "/home/natalie/kde/build/$module" ]] && echo "-C /home/natalie/kde/build/$module install" || echo "$arg")
         command="$command $option"
     done
     eval "$command"
 }
-function kdesrc-test()
+compdef _kdesrc-build kdesrc-install
+#alias kdesrc-install-sessions='~/kde/build/plasma-workspace/login-sessions/install-sessions.sh'
+
+function kdesrc-test()  # usage: konfirm -R 'testPlacement' kwin
 {
-    command="ctest --verbose --output-on-failure --timeout 30"
+	export PATH=/home/natalie/kde/usr/bin/:$PATH
+    command="ctest --verbose --output-on-failure --timeout 300"
     for arg in "$@"; do
-        module=$([ "$arg" = "." ] && echo "${arg/\./"$( basename $( git rev-parse --show-toplevel ) )"}" || echo "$arg")
+        module=$([ "$arg" = "." ] && echo "${arg/\./"$(basename $( git rev-parse --show-toplevel ))"}" || echo "$arg")
         option=$([[ -d "/home/natalie/kde/build/$module" ]] && echo "--test-dir /home/natalie/kde/build/$module" || echo "$arg")
         command="$command $option"
     done
     command="rainbow --green=PASS --red=FAIL! $command"
     eval "$command"
+    PATH=$(echo "$PATH" | sed -e 's/:\/home\/natalie\/kde\/usr\/bin$//')
+    rm "/home/natalie/kde/src/$module/appiumtest/utils/__pycache__"
 }
 alias konfirm='kdesrc-test'
-# konfirm -R 'testPlacement' kwin
+compdef _kdesrc-build kdesrc-test
+
 function kdesrc-mr()
 {
     MR=$1
-    REPO=$( basename $( git rev-parse --show-toplevel ) )
+    REPO=$(basename $(git rev-parse --show-toplevel))
 
-    # Check out the latest master to get a clean state
-    git checkout master
-    git pull
+    # check out the MR
+    git branch --delete "mr/$MR" # delete an existing branch if present, so we can check out the latest version of the MR
+    git mr "$MR" # we are now on a branch named "mr/[number] that is based on some base branch
 
-    # Delete an existing branch if present, so we can check out the latest version of the MR
-    git branch --delete "mr/$MR"
-    git mr "$MR"
-    # We are now on a branch named "mr/[number] that is based on some base branch
+    # build
+    kdesrc-build --no-src --no-include-dependencies "$REPO"
 
-    # Rebase it on current master, or else die trying
-    git pull --rebase origin master
-    if [ $? -ne 0 ]; then
-        echo "ERROR: $REPO !$MR does not cleanly rebase. Undoing the rebase and testing from its older state." | rainbow --red="ERROR"
-        git rebase --abort
-    fi
-
-    # Build it!
-    kdesrc-build --no-src --no-include-dependencies $REPO
-
-    # Handle errors
+    # handle errors
     ERRORFILE=~/kde/src/log/latest/$REPO/error.log
-    if [ -f $ERRORFILE ]
+    if [ -f "$ERRORFILE" ]
     then
-        cat $ERRORFILE
+        cat "$ERRORFILE"
         false
     else
         source ../../build/$REPO/prefix.sh
     fi
+}
+
+function kdesrc-locate()
+{
+	locate -i "/home/natalie/kde/src/*$1*" -l 1 | grep -i -P --color=always "(?<=/home/natalie/kde/src/)[^/]+";
+	locate -i "/home/natalie/kde/src/*/*$1*.h" | grep -i -P --color=always "(?<=/home/natalie/kde/src/)[^/]+";
+	echo "";
+	locate -i "/home/natalie/kde/usr/include/*/*$1*.h" | grep -i -P --color=always "(?<=/home/natalie/kde/usr/include/)(\w|-|/)+(?=/)"
 }
 
 # aliases for session management
@@ -262,7 +276,7 @@ alias ksm-lock='qdbus org.kde.screensaver /ScreenSaver org.freedesktop.ScreenSav
 alias ksm-sleep='qdbus org.kde.Solid.PowerManagement /org/kde/Solid/PowerManagement/Actions/SuspendSession org.kde.Solid.PowerManagement.Actions.SuspendSession.suspendToRam'
 alias ksm-hibernate='qdbus org.kde.Solid.PowerManagement /org/kde/Solid/PowerManagement/Actions/SuspendSession org.kde.Solid.PowerManagement.Actions.SuspendSession.suspendToDisk'
 alias ksm-suspend='qdbus org.kde.Solid.PowerManagement /org/kde/Solid/PowerManagement/Actions/SuspendSession org.kde.Solid.PowerManagement.Actions.SuspendSession.suspendHybrid'
-alias ksm-dim='qdbus org.kde.Solid.PowerManagement /org/kde/Solid/PowerManagement/Actions/BrightnessControl org.kde.Solid.PowerManagement.Actions.BrightnessControl.setBrightness 0'
+alias ksm-blank='sleep 3 & qdbus org.kde.kglobalaccel /component/org_kde_powerdevil org.kde.kglobalaccel.Component.invokeShortcut "Turn Off Screen"'
 
 # aliases for shell scripts
 alias lpd='duplex_print_CLI.sh'
@@ -274,5 +288,6 @@ alias backup-root='sudo rsync -ahpvxAEHSWX --numeric-ids --progress --stats --ex
 alias touchpaddriver-libinput='sudo mv /etc/X11/xorg.conf.d/70-synaptics.conf /etc/X11/xorg.conf.d/30-synaptics.conf; sudo mv /usr/share/X11/xorg.conf.d/70-synaptics.conf /usr/share/X11/xorg.conf.d/30-synaptics.conf'
 alias touchpaddriver-synaptics='sudo mv /etc/X11/xorg.conf.d/30-synaptics.conf /etc/X11/xorg.conf.d/70-synaptics.conf'
 alias grep='grep --color=always'
+alias komparediff='~/kde5/usr/bin/kompare -o -'
 alias procgrep='ps aux | grep -i'
 alias zonfig='micro ~/.zshrc'
