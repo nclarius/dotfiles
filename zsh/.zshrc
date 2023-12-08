@@ -45,6 +45,7 @@ source /usr/share/zsh/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 # tab completion
 autoload -Uz +X compinit && compinit
 autoload -Uz +X bashcompinit && bashcompinit
+compinit -u
 # match case-insensitive, then partial word, then substring
 zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' '+r:|[._-]=* l:|[._-]=*' '+r:|=* l:|=*'
 # sudo completion
@@ -60,6 +61,7 @@ setopt autocd
 # fpath=(/usr/share/zsh/site-functions/ $fpath)
 # fpath=(/home/natalie/kde/src/kdesrc-build/completions/zsh $fpath)
 # #source /home/natalie/kde/src/kdesrc-build/completions/zsh/_kdesrc-build 2>/dev/null
+fpath=(/home/natalie/kde/usr/share/zsh/site-functions $fpath)
 # completion for all files
 alias completions='source /home/natalie/Dropbox/Code/Shell/generate_zsh_completions.sh'
 
@@ -182,8 +184,8 @@ alias pacinstall='sudo pacman -Sy; yay -S --noconfirm --sudoloop'
 alias pacuninstall='sudo pacman -Sy; sudo pacman -R'
 alias pacupdatabase='sudo pacman -Sy; sudo pacman -Fy'
 alias pacupgradable='yay -Sy && yay -Qu && echo $(yay -Qu | wc -l) "packages to upgrade"'
-alias pacupgrade='xdotool key "ctrl+shift+i"; sudo pacman -Fy; sudo pacman -Syu --noconfirm --disable-download-timeout --ignore=network-manager-sstp,pipewire,libpipewire && sudo paccache -r -k 1 && paccache -r -c ~/.cache/yay; notify-send "System upgrade finished" -a "pacman" -i update-none; xdotool key "ctrl+shift+i"'
-alias pacupgradeall='xdotool key "ctrl+shift+i"; sudo pacman -Fy; yay -Syu --noconfirm --sudoloop --disable-download-timeout --ignore=network-manager-sstp,pipewire && sudo flatpak update --noninteractive &&rm -r ~/.cache/yay; notify-send "System upgrade finished" -a "pacman" -i update-none; xdotool key "ctrl+shift+i"'
+alias pacupgrade='xdotool key "ctrl+shift+i"; sudo pacman -Fy; kde-inhibit --power sudo pacman -Syu --noconfirm --disable-download-timeout --ignore=network-manager-sstp,pipewire,libpipewire && sudo paccache -r -k 1 && paccache -r -c ~/.cache/yay; notify-send "System upgrade finished" -a "pacman" -i update-none; xdotool key "ctrl+shift+i"'
+alias pacupgradeall='xdotool key "ctrl+shift+i"; sudo pacman -Fy; kde-inhibit --power yay -Syu --noconfirm --sudoloop --disable-download-timeout --ignore=network-manager-sstp,pipewire && sudo flatpak update --noninteractive && rm -r ~/.cache/yay; notify-send "System upgrade finished" -a "pacman" -i update-none; xdotool key "ctrl+shift+i"'
 
 # aliases for kdesrc-build
 function kode()
@@ -191,7 +193,7 @@ function kode()
     module=$([ "$arg" = "." ] && echo "${arg/\./"$(basename $(git rev-parse --show-toplevel))"}" || echo "$arg")
     code "/home/natalie/kde/src/$module"
 }
-alias kdesrc-build='xdotool key "ctrl+shift+o"; xdotool key "ctrl+shift+d";  kde-inhibit --power kdesrc-build'
+alias kdesrc-build='xdotool key "ctrl+shift+o"; xdotool key "ctrl+shift+d"; kdesrc-build'
 alias kdesrc-build-5='xdotool key "ctrl+shift+o"; xdotool key "ctrl+shift+d"; kdesrc-build --rc-file=/home/natalie/.config/kde5src-buildrc'
 function kompile()
 {
@@ -290,4 +292,4 @@ alias touchpaddriver-synaptics='sudo mv /etc/X11/xorg.conf.d/30-synaptics.conf /
 alias grep='grep --color=always'
 alias komparediff='~/kde5/usr/bin/kompare -o -'
 alias procgrep='ps aux | grep -i'
-alias zonfig='micro ~/.zshrc'
+alias zonfig='kwrite ~/Dropbox/Code/dotfiles/zsh/.zshrc'
