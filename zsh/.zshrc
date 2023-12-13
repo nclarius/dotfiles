@@ -1,6 +1,7 @@
 # ~/.zshrc
 
 # prompt
+
 # semantic shell integration: https://gitlab.freedesktop.org/Per_Bothner/specifications/-/blob/master/proposals/prompts-data/shell-integration.zsh
 function get_kde_color() {
     IFS="," read -A color <<< $(kreadconfig5 --file kdeglobals --group "$1" --key "$2")
@@ -40,6 +41,17 @@ preexec_functions+=(__prompt_preexec)
 precmd_functions+=(__prompt_precmd)
 
 # completion
+
+# completion sources
+#source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+#fpath=(/usr/local/share/zsh-completions $fpath)
+#fpath=(/usr/share/zsh/site-functions/ $fpath)
+#fpath=(/home/natalie/kde/src/kdesrc-build/completions/zsh $fpath)
+#source /home/natalie/kde/src/kdesrc-build/completions/zsh/_kdesrc-build 2>/dev/null
+fpath=(/home/natalie/kde/usr/share/zsh/site-functions $fpath)
+# completion for all files
+alias completions='source /home/natalie/Dropbox/Code/Shell/generate_zsh_completions.sh'
+
 # completion menu
 source /usr/share/zsh/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 # tab completion
@@ -54,16 +66,6 @@ zstyle ':completion::complete:*' gain-privileges 1
 zstyle ':completion:*' format $'\e[3m\e[2m%d\e[0m\e[0m'
 # automatically cd to path
 setopt autocd
-
-# completion sources
-#source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-#fpath=(/usr/local/share/zsh-completions $fpath)
-# fpath=(/usr/share/zsh/site-functions/ $fpath)
-# fpath=(/home/natalie/kde/src/kdesrc-build/completions/zsh $fpath)
-# #source /home/natalie/kde/src/kdesrc-build/completions/zsh/_kdesrc-build 2>/dev/null
-fpath=(/home/natalie/kde/usr/share/zsh/site-functions $fpath)
-# completion for all files
-alias completions='source /home/natalie/Dropbox/Code/Shell/generate_zsh_completions.sh'
 
 # history
 export HISTFILE=~/.zsh_history
