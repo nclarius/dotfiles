@@ -195,8 +195,8 @@ function kode()
     module=$([ "$arg" = "." ] && echo "${arg/\./"$(basename $(git rev-parse --show-toplevel))"}" || echo "$arg")
     code "/home/natalie/kde/src/$module"
 }
-alias kdesrc-build='xdotool key "ctrl+shift+o"; xdotool key "ctrl+shift+d"; kdesrc-build'
-alias kdesrc-build-5='xdotool key "ctrl+shift+o"; xdotool key "ctrl+shift+d"; kdesrc-build --rc-file=/home/natalie/.config/kde5src-buildrc'
+alias kdesrc-build='xdotool key "ctrl+shift+o"; xdotool key "ctrl+shift+d"; kde-inhibit --power kdesrc-build'
+alias kdesrc-build-5='xdotool key "ctrl+shift+o"; xdotool key "ctrl+shift+d"; kde-inhibit --power kdesrc-build --rc-file=/home/natalie/.config/kde5src-buildrc'
 function kompile()
 {
     command="kdesrc-build --no-src --no-include-dependencies"
