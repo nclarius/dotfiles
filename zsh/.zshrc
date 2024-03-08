@@ -186,8 +186,8 @@ alias pacinstall='sudo pacman -Sy; yay -S --noconfirm --sudoloop'
 alias pacuninstall='sudo pacman -Sy; sudo pacman -R'
 alias pacupdatabase='sudo pacman -Sy; sudo pacman -Fy'
 alias pacupgradable='yay -Sy && yay -Qu && echo $(yay -Qu | wc -l) "packages to upgrade"'
-alias pacupgrade='xdotool key "ctrl+shift+i"; sudo pacman -Fy; kde-inhibit --power sudo pacman -Syu --noconfirm --disable-download-timeout --ignore=network-manager-sstp,pipewire,libpipewire && sudo paccache -r -k 1 && paccache -r -c ~/.cache/yay; notify-send "System upgrade finished" -a "pacman" -i update-none; xdotool key "ctrl+shift+i"'
-alias pacupgradeall='xdotool key "ctrl+shift+i"; sudo pacman -Fy; kde-inhibit --power yay -Syu --noconfirm --sudoloop --disable-download-timeout --ignore=network-manager-sstp,pipewire && sudo flatpak update --noninteractive && rm -r ~/.cache/yay; notify-send "System upgrade finished" -a "pacman" -i update-none; xdotool key "ctrl+shift+i"'
+alias pacupgrade='xdotool key "ctrl+shift+i"; sudo pacman -Fy; kde-inhibit --power sudo pacman -Syu --noconfirm --disable-download-timeout --ignore=network-manager-sstp,pipewire,libpipewire,libcamera,libcamera-ipa && sudo paccache -r -k 1 && paccache -r -c ~/.cache/yay; notify-send "System upgrade finished" -a "pacman" -i update-none; xdotool key "ctrl+shift+i"'
+alias pacupgradeall='xdotool key "ctrl+shift+i"; sudo pacman -Fy; kde-inhibit --power yay -Syu --noconfirm --sudoloop --disable-download-timeout --ignore=network-manager-sstp,pipewire,libpipewire,libcamera-ipa && sudo flatpak update --noninteractive && rm -r ~/.cache/yay; notify-send "System upgrade finished" -a "pacman" -i update-none; xdotool key "ctrl+shift+i"'
 
 # aliases for kdesrc-build
 function kode()
@@ -195,8 +195,39 @@ function kode()
     module=$([ "$arg" = "." ] && echo "${arg/\./"$(basename $(git rev-parse --show-toplevel))"}" || echo "$arg")
     code "/home/natalie/kde/src/$module"
 }
-alias kdesrc-build='xdotool key "ctrl+shift+o"; xdotool key "ctrl+shift+d"; kde-inhibit --power kdesrc-build'
-alias kdesrc-build-5='xdotool key "ctrl+shift+o"; xdotool key "ctrl+shift+d"; kde-inhibit --power kdesrc-build --rc-file=/home/natalie/.config/kde5src-buildrc'
+
+export PATH="/home/natalie/kde/src/kde-builder:$PATH"
+function _comp_kde_builder_launch
+{
+  local cur
+  COMPREPLY=()
+  cur="${COMP_WORDS[COMP_CWORD]}"
+
+  # Complete only the first argument
+  if [[ $COMP_CWORD != 1 ]]; then
+    return 0
+  fi
+
+  # Retrieve build modules through kde-builder-launch
+  # If the exit status indicates failure, set the wordlist empty to avoid
+  # unrelated messages.
+  local modules
+  if ! modules=$(kde-builder-launch --list-installed);
+  then
+      modules=""
+  fi
+
+  # Return completions that match the current word
+  COMPREPLY=( $(compgen -W "${modules}" -- "$cur") )
+
+  return 0
+}
+
+## Register autocomplete function
+complete -o nospace -F _comp_kde_builder_launch kde-builder-launch
+
+alias kdesrc-build='xdotool key "ctrl+shift+o"; xdotool key "ctrl+shift+d"; ~/kde/usr/bin/kde-inhibit --power kdesrc-build'
+alias kdesrc-build-5='xdotool key "ctrl+shift+o"; xdotool key "ctrl+shift+d"; ~/kde/usr/bin/kde-inhibit --power kdesrc-build --rc-file=/home/natalie/.config/kde5src-buildrc'
 function kompile()
 {
     command="kdesrc-build --no-src --no-include-dependencies"
@@ -226,7 +257,7 @@ compdef _kdesrc-build kdesrc-install
 
 function kdesrc-test()  # usage: konfirm -R 'testPlacement' kwin
 {
-	export PATH=/home/natalie/kde/usr/bin/:$PATH
+# 	export PATH=/home/natalie/kde/usr/bin/:$PATH
     command="ctest --verbose --output-on-failure --timeout 300"
     for arg in "$@"; do
         module=$([ "$arg" = "." ] && echo "${arg/\./"$(basename $( git rev-parse --show-toplevel ))"}" || echo "$arg")
@@ -235,7 +266,7 @@ function kdesrc-test()  # usage: konfirm -R 'testPlacement' kwin
     done
     command="rainbow --green=PASS --red=FAIL! $command"
     eval "$command"
-    PATH=$(echo "$PATH" | sed -e 's/:\/home\/natalie\/kde\/usr\/bin$//')
+#     PATH=$(echo "$PATH" | sed -e 's/:\/home\/natalie\/kde\/usr\/bin$//')
     rm "/home/natalie/kde/src/$module/appiumtest/utils/__pycache__"
 }
 alias konfirm='kdesrc-test'
@@ -272,6 +303,14 @@ function kdesrc-locate()
 	locate -i "/home/natalie/kde/usr/include/*/*$1*.h" | grep -i -P --color=always "(?<=/home/natalie/kde/usr/include/)(\w|-|/)+(?=/)"
 }
 
+# aliases for session start
+alias start-plasma-x11='startx /usr/bin/startplasma-x11'
+alias start-plasma-dev-x11='startx /home/natalie/kde/usr/lib/libexec/startplasma-dev.sh -x11'
+alias start-plasma-wayland='dbus-run-session /usr/bin/startplasma-wayland'
+alias start-plasma-dev-wayland='dbus-run-session /home/natalie/kde/usr/lib/libexec/startplasma-dev.sh -wayland'
+alias start-gnome-x11='startx /usr/bin/gnome-session'
+alias start-gnome-wayland='dbus-run-session /usr/bin/gnome-session'
+
 # aliases for session management
 alias ksm-logout='qdbus org.kde.Shutdown /Shutdown org.kde.Shutdown.logout'
 alias ksm-shutdown='qdbus org.kde.Shutdown /Shutdown org.kde.Shutdown.logoutAndShutdown'
@@ -289,8 +328,8 @@ alias backup-home='rsync -ahpvxAEHSWX --numeric-ids --progress --stats --exclude
 alias backup-root='sudo rsync -ahpvxAEHSWX --numeric-ids --progress --stats --exclude=home --exclude=media --exclude=var/temp --exclude=swapfile / root/$(date +"%Y-%m-%d")'
 
 # other aliases
-alias touchpaddriver-libinput='sudo mv /etc/X11/xorg.conf.d/70-synaptics.conf /etc/X11/xorg.conf.d/30-synaptics.conf; sudo mv /usr/share/X11/xorg.conf.d/70-synaptics.conf /usr/share/X11/xorg.conf.d/30-synaptics.conf'
-alias touchpaddriver-synaptics='sudo mv /etc/X11/xorg.conf.d/30-synaptics.conf /etc/X11/xorg.conf.d/70-synaptics.conf'
+alias touchpaddriver-synaptics='sudo mv /etc/X11/xorg.conf.d/40-libinput.conf /etc/X11/xorg.conf.d/30-libinput.conf; sudo mv /usr/share/X11/xorg.conf.d/30-synaptics.conf /usr/share/X11/xorg.conf.d/40-synaptics.conf'
+alias touchpaddriver-libinput='sudo mv /etc/X11/xorg.conf.d/40-synaptics.conf /etc/X11/xorg.conf.d/30-synaptics.conf; sudo mv /etc/X11/xorg.conf.d/30-libinput.conf /etc/X11/xorg.conf.d/40-libinput.conf'
 alias grep='grep --color=always'
 alias komparediff='~/kde5/usr/bin/kompare -o -'
 alias procgrep='ps aux | grep -i'
