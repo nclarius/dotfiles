@@ -20,7 +20,7 @@ function __prompt_precmd() {
       _PROMPT_SAVE_PS2="$PS2"
       PS1=$'
 %F{$accent}%f '
-	  RPROMPT='❯%1d% $GITSTATUS_PROMPT'
+	  RPROMPT='%0/% $GITSTATUS_PROMPT'
       PS1=$'%{\e]133;P;k=i\a%}'$PS1$'%{\e]133;B\a\e]122;> \a%}'
       PS2=$'%{\e]133;P;k=s\a%}'$PS2$'%{\e]133;B\a%}'
     fi
@@ -66,6 +66,8 @@ zstyle ':completion::complete:*' gain-privileges 1
 zstyle ':completion:*' format $'\e[3m\e[2m%d\e[0m\e[0m'
 # automatically cd to path
 setopt autocd
+# sort suggestions by most recently accessed
+zstyle ':completion:*' file-sort access
 
 # history
 export HISTFILE=~/.zsh_history
@@ -304,12 +306,12 @@ function kdesrc-locate()
 }
 
 # aliases for session start
-alias start-plasma-x11='startx /usr/bin/startplasma-x11'
+alias start-plasma-dist-x11='startx /usr/bin/startplasma-x11'
 alias start-plasma-dev-x11='startx /home/natalie/kde/usr/lib/libexec/startplasma-dev.sh -x11'
-alias start-plasma-wayland='dbus-run-session /usr/bin/startplasma-wayland'
+alias start-plasma-dist-wayland='dbus-run-session /usr/bin/startplasma-wayland'
 alias start-plasma-dev-wayland='dbus-run-session /home/natalie/kde/usr/lib/libexec/startplasma-dev.sh -wayland'
-alias start-gnome-x11='startx /usr/bin/gnome-session'
-alias start-gnome-wayland='dbus-run-session /usr/bin/gnome-session'
+alias start-gnome-dist-x11='startx /usr/bin/gnome-session'
+alias start-gnome-dist-wayland='dbus-run-session /usr/bin/gnome-session'
 
 # aliases for session management
 alias ksm-logout='qdbus org.kde.Shutdown /Shutdown org.kde.Shutdown.logout'
@@ -328,9 +330,11 @@ alias backup-home='rsync -ahpvxAEHSWX --numeric-ids --progress --stats --exclude
 alias backup-root='sudo rsync -ahpvxAEHSWX --numeric-ids --progress --stats --exclude=home --exclude=media --exclude=var/temp --exclude=swapfile / root/$(date +"%Y-%m-%d")'
 
 # other aliases
-alias touchpaddriver-synaptics='sudo mv /etc/X11/xorg.conf.d/40-libinput.conf /etc/X11/xorg.conf.d/30-libinput.conf; sudo mv /usr/share/X11/xorg.conf.d/30-synaptics.conf /usr/share/X11/xorg.conf.d/40-synaptics.conf'
+alias touchpaddriver-synaptics='sudo mv /etc/X11/xorg.conf.d/40-libinput.conf /etc/X11/xorg.conf.d/30-libinput.conf; sudo mv /etc/X11/xorg.conf.d/xorg.conf.d/30-synaptics.conf /etc/X11/xorg.conf.d/xorg.conf.d/40-synaptics.conf'
 alias touchpaddriver-libinput='sudo mv /etc/X11/xorg.conf.d/40-synaptics.conf /etc/X11/xorg.conf.d/30-synaptics.conf; sudo mv /etc/X11/xorg.conf.d/30-libinput.conf /etc/X11/xorg.conf.d/40-libinput.conf'
+alias restart-powerdevil-dist='systemctl --user restart plasma-powerdevil.service'
+alias restart-powerdevil-dev='pkill org_kde_powerde -u $UID; /home/natalie/kde/usr/lib/libexec/org_kde_powerdevil &'
 alias grep='grep --color=always'
 alias komparediff='~/kde5/usr/bin/kompare -o -'
-alias procgrep='ps aux | grep -i'
+alias procgrep='ps aux | head -n 1; ps aux | grep -i'
 alias zonfig='kwrite ~/Dropbox/Code/dotfiles/zsh/.zshrc'
