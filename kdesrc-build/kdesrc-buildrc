@@ -27,15 +27,18 @@ global
 
     # kdesrc-build can install a sample .xsession file for "Custom"
     # (or "XSession") logins,
-    install-session-driver false
+    # install-session-driver false
 
     # or add a environment variable-setting script to
     # ~/.config/kde-env-master.sh
-    install-environment-driver true
+    # install-environment-driver true
 
     # Build with LSP support for everything that supports it
     compile-commands-linking true
     compile-commands-export true
+    
+    # Don't rebuild when source code has not changed
+    build-when-unchanged false
 
     # Don't stop the build process on the first failure
     stop-on-failure false
@@ -56,29 +59,33 @@ end global
 # end module
 # 
 # module kwin
-#     branch natalie
+#     branch remove-touchpad-gestures
 # end module
 # 
 # module plasma-workspace
 #     branch natalie
 # end module
-# 
-# module krunner
-#     branch natalie
-# end module
-# 
-# module milou
-#     branch natalie
-# end module
-# 
-# module dolphin
-#     branch natalie
-# end module
+
+module krunner
+    branch natalie
+end module
+ 
+module dolphin
+    branch natalie
+end module
+
+module ktexteditor
+	branch fork
+end module
+
+module kscreen
+    branch daemon-suspend-debug
+end module
 
 # Common options that should be set for some KDE modules no matter how
 # kdesrc-build finds them. Do not comment these out unless you know
 # what you are doing.
-include /home/natalie/kde/src/sysadmin-repo-metadata/module-definitions/kf6-common-options.ksb
+include /home/natalie/kde/src/repo-metadata/module-definitions/kf6-common-options.ksb
 
 # Support libraries that use Qt6
 # include /home/natalie/kde/src/kdesrc-build/custom-qt6-libs.ksb
@@ -89,16 +96,16 @@ include /home/natalie/kde/src/sysadmin-repo-metadata/module-definitions/kf6-comm
 
 # Refers to the kf6-frameworks file included as part of kdesrc-build. The file
 # is simply read-in at this point as if you'd typed it in yourself.
-include /home/natalie/kde/src/sysadmin-repo-metadata/module-definitions/kf6-frameworks.ksb
+include /home/natalie/kde/src/repo-metadata/module-definitions/kf6-frameworks.ksb
 
 # Refers to the kf6-workspace file included as part of kdesrc-build. The file
 # is simply read-in at this point as if you'd typed it in yourself.
-include /home/natalie/kde/src/sysadmin-repo-metadata/module-definitions/kf6-workspace.ksb
+include /home/natalie/kde/src/repo-metadata/module-definitions/kf6-workspace.ksb
 
 # Refers to the kf6-applications file included as part of kdesrc-build. The file
 # is simply read-in at this point as if you'd typed it in yourself.
-include /home/natalie/kde/src/sysadmin-repo-metadata/module-definitions/kf6-applications.ksb
+include /home/natalie/kde/src/repo-metadata/module-definitions/kf6-applications.ksb
 
 # Refers to the kf6-kdepim file included as part of kdesrc-build. The file
 # is simply read-in at this point as if you'd typed it in yourself.
-include /home/natalie/kde/src/sysadmin-repo-metadata/module-definitions/kf6-kdepim.ksb
+include /home/natalie/kde/src/repo-metadata/module-definitions/kf6-kdepim.ksb

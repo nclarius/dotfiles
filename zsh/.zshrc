@@ -44,8 +44,8 @@ precmd_functions+=(__prompt_precmd)
 
 # completion sources
 #source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-#fpath=(/usr/local/share/zsh-completions $fpath)
-#fpath=(/usr/share/zsh/site-functions/ $fpath)
+# fpath=(/usr/local/share/zsh-completions $fpath)
+# fpath=(/usr/share/zsh/site-functions/ $fpath)
 #fpath=(/home/natalie/kde/src/kdesrc-build/completions/zsh $fpath)
 #source /home/natalie/kde/src/kdesrc-build/completions/zsh/_kdesrc-build 2>/dev/null
 fpath=(/home/natalie/kde/usr/share/zsh/site-functions $fpath)
@@ -55,11 +55,16 @@ alias completions='source /home/natalie/Dropbox/Code/Shell/generate_zsh_completi
 # completion menu
 source /usr/share/zsh/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 # tab completion
+zmodload zsh/complist
 autoload -Uz +X compinit && compinit
 autoload -Uz +X bashcompinit && bashcompinit
 compinit -u
-# match case-insensitive, then partial word, then substring
-zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' '+r:|[._-]=* l:|[._-]=*' '+r:|=* l:|=*'
+# # match case-insensitive, then partial word, then substring
+# zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}'  '+r:|[._-]=* l:|[._-]=*' '+r:|=* l:|=*'
+# zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+# match substring
+# zstyle ':completion:*' matcher-list 'l:|=* r:|=*'
+zstyle ':completion:*' matcher-list '' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
 # sudo completion
 zstyle ':completion::complete:*' gain-privileges 1
 # completion category headings style
@@ -68,6 +73,9 @@ zstyle ':completion:*' format $'\e[3m\e[2m%d\e[0m\e[0m'
 setopt autocd
 # sort suggestions by most recently accessed
 zstyle ':completion:*' file-sort access
+# Speed up compinit
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path "${XDG_CACHE_HOME:-$HOME/.cache}/zsh/cache"
 
 # history
 export HISTFILE=~/.zsh_history
@@ -121,6 +129,9 @@ export THEFUCK_EXCLUDE_RULES='git_pull:git_push'
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/Dropbox/Code/Shell:$PATH"
 export PATH="$HOME/kde/src/kdesrc-build:$PATH"
+# export PATH="/home/natalie/kde/src/kde-builder:/home/natalie/kde/src/kdesrc-build:/home/natalie/Dropbox/Code/Shell:/home/natalie/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/var/lib/flatpak/exports/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl"
+export PATH="$HOME/.local/share/coursier/bin:$PATH"
+
 
 # make sudo work with aliases
 alias sudo='sudo '
@@ -152,7 +163,6 @@ function o () # open file externally
 alias cp='cp -i -r'
 alias mkdir='mkdir -p'
 function touchp() { if [[ "$1" == */* ]]; then if [ ! -d "${1%/*}/" ]; then mkdir -p "${1%/*}/"; fi; fi; touch "$1" }
-alias touch='touchp'
 function cpr() # copy file including parent dirs from source to destination
 {
 	if [ "$#" -ne 3 ]; then echo "cpr: usage: cpr source-dir file-to-copy destination-dir" >&2; return 1; fi
@@ -184,8 +194,8 @@ alias pacinfo='pacman -Qi'
 alias pacsearch='yay -Ss'
 alias pacfind='yay -Qs'
 alias pacfile='yay -F'
-alias pacinstall='sudo pacman -Sy; yay -S --noconfirm --sudoloop'
-alias pacuninstall='sudo pacman -Sy; sudo pacman -R'
+alias pacinstall='sudo pacman -Sy; yay -S --noconfirm'
+alias pacuninstall='sudo pacman -Sy; yay -R'
 alias pacupdatabase='sudo pacman -Sy; sudo pacman -Fy'
 alias pacupgradable='yay -Sy && yay -Qu && echo $(yay -Qu | wc -l) "packages to upgrade"'
 alias pacupgrade='xdotool key "ctrl+shift+i"; sudo pacman -Fy; kde-inhibit --power sudo pacman -Syu --noconfirm --disable-download-timeout --ignore=network-manager-sstp,pipewire,libpipewire,libcamera,libcamera-ipa && sudo paccache -r -k 1 && paccache -r -c ~/.cache/yay; notify-send "System upgrade finished" -a "pacman" -i update-none; xdotool key "ctrl+shift+i"'
@@ -228,8 +238,8 @@ function _comp_kde_builder_launch
 ## Register autocomplete function
 complete -o nospace -F _comp_kde_builder_launch kde-builder-launch
 
-alias kdesrc-build='xdotool key "ctrl+shift+o"; xdotool key "ctrl+shift+d"; ~/kde/usr/bin/kde-inhibit --power kdesrc-build'
-alias kdesrc-build-5='xdotool key "ctrl+shift+o"; xdotool key "ctrl+shift+d"; ~/kde/usr/bin/kde-inhibit --power kdesrc-build --rc-file=/home/natalie/.config/kde5src-buildrc'
+alias kdesrc-build='xdotool key "ctrl+shift+o"; xdotool key "ctrl+shift+d"; kde-builder'
+alias kdesrc-build-5='xdotool key "ctrl+shift+o"; xdotool key "ctrl+shift+d"; kde-builder --rc-file=/home/natalie/.config/kde5src-buildrc'
 function kompile()
 {
     command="kdesrc-build --no-src --no-include-dependencies"
@@ -336,5 +346,5 @@ alias restart-powerdevil-dist='systemctl --user restart plasma-powerdevil.servic
 alias restart-powerdevil-dev='pkill org_kde_powerde -u $UID; /home/natalie/kde/usr/lib/libexec/org_kde_powerdevil &'
 alias grep='grep --color=always'
 alias komparediff='~/kde5/usr/bin/kompare -o -'
-alias procgrep='ps aux | head -n 1; ps aux | grep -i'
+alias procgrep='ps aux | head -n 1; ps aux | grep -v "grep" | grep -i'
 alias zonfig='kwrite ~/Dropbox/Code/dotfiles/zsh/.zshrc'
