@@ -44,10 +44,12 @@ precmd_functions+=(__prompt_precmd)
 
 # completion sources
 #source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-# fpath=(/usr/local/share/zsh-completions $fpath)
-# fpath=(/usr/share/zsh/site-functions/ $fpath)
+#fpath=(/usr/local/share/zsh-completions $fpath)
+#fpath=(/usr/share/zsh/site-functions/ $fpath)
 #fpath=(/home/natalie/kde/src/kdesrc-build/completions/zsh $fpath)
 #source /home/natalie/kde/src/kdesrc-build/completions/zsh/_kdesrc-build 2>/dev/null
+fpath=(/home/natalie/.zsh/completions $fpath)
+fpath=(/home/natalie/kde/src/kde-builder/data/completions/zsh $fpath)
 fpath=(/home/natalie/kde/usr/share/zsh/site-functions $fpath)
 # completion for all files
 alias completions='source /home/natalie/Dropbox/Code/Shell/generate_zsh_completions.sh'
@@ -56,9 +58,8 @@ alias completions='source /home/natalie/Dropbox/Code/Shell/generate_zsh_completi
 source /usr/share/zsh/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 # tab completion
 zmodload zsh/complist
-autoload -Uz +X compinit && compinit
+autoload -Uz +X compinit && compinit -u
 autoload -Uz +X bashcompinit && bashcompinit
-compinit -u
 # # match case-insensitive, then partial word, then substring
 # zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}'  '+r:|[._-]=* l:|[._-]=*' '+r:|=* l:|=*'
 # zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
@@ -73,7 +74,7 @@ zstyle ':completion:*' format $'\e[3m\e[2m%d\e[0m\e[0m'
 setopt autocd
 # sort suggestions by most recently accessed
 zstyle ':completion:*' file-sort access
-# Speed up compinit
+# speed up compinit
 zstyle ':completion:*' use-cache on
 zstyle ':completion:*' cache-path "${XDG_CACHE_HOME:-$HOME/.cache}/zsh/cache"
 
@@ -100,6 +101,8 @@ bindkey '^J'      backward-kill-line     # ctrl+j         delete everything befo
 #bindkey '^[[B'    down-line-or-history   # down           go to next command in history
 #bindkey '^[[5~'   up-line-or-history     # pg_up          move cursor one char backward
 #bindkey '^[[6~'   down-line-or-history   # pg_dn          move cursor one char forward
+bindkey '^[[1;5C'  vi-forward-blank-word  # ctrl+right     go to next match group
+bindkey '^[[1;5D'  vi-backward-blank-word # ctrl+down      to to previous match group
 
 # never beep
 setopt NO_BEEP
@@ -128,9 +131,8 @@ export THEFUCK_EXCLUDE_RULES='git_pull:git_push'
 # executable paths
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/Dropbox/Code/Shell:$PATH"
-export PATH="$HOME/kde/src/kdesrc-build:$PATH"
-# export PATH="/home/natalie/kde/src/kde-builder:/home/natalie/kde/src/kdesrc-build:/home/natalie/Dropbox/Code/Shell:/home/natalie/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/var/lib/flatpak/exports/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl"
-export PATH="$HOME/.local/share/coursier/bin:$PATH"
+# export PATH="/var/lib/flatpak/exports/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:$HOME/.local/share/coursier/bin:$PATH"
+# [[ ! -r '/home/natalie/.opam/opam-init/init.zsh' ]] || source '/home/natalie/.opam/opam-init/init.zsh' > /dev/null 2> /dev/null
 
 
 # make sudo work with aliases
@@ -199,16 +201,14 @@ alias pacuninstall='sudo pacman -Sy; yay -R'
 alias pacupdatabase='sudo pacman -Sy; sudo pacman -Fy'
 alias pacupgradable='yay -Sy && yay -Qu && echo $(yay -Qu | wc -l) "packages to upgrade"'
 alias pacupgrade='xdotool key "ctrl+shift+i"; sudo pacman -Fy; kde-inhibit --power sudo pacman -Syu --noconfirm --disable-download-timeout --ignore=network-manager-sstp,pipewire,libpipewire,libcamera,libcamera-ipa && sudo paccache -r -k 1 && paccache -r -c ~/.cache/yay; notify-send "System upgrade finished" -a "pacman" -i update-none; xdotool key "ctrl+shift+i"'
-alias pacupgradeall='xdotool key "ctrl+shift+i"; sudo pacman -Fy; kde-inhibit --power yay -Syu --noconfirm --sudoloop --disable-download-timeout --ignore=network-manager-sstp,pipewire,libpipewire,libcamera-ipa && sudo flatpak update --noninteractive && rm -r ~/.cache/yay; notify-send "System upgrade finished" -a "pacman" -i update-none; xdotool key "ctrl+shift+i"'
+alias pacupgradeall='xdotool key "ctrl+shift+i"; sudo pacman -Fy; kde-inhibit --power yay -Syu --noconfirm --sudoloop --disable-download-timeout --ignore=network-manager-sstp,pipewire,libpipewire,libcamera,libcamera-ipa && sudo flatpak update --noninteractive && rm -rf ~/.cache/yay; notify-send "System upgrade finished" -a "pacman" -i update-none; xdotool key "ctrl+shift+i"'
 
-# aliases for kdesrc-build
 function kode()
 {
     module=$([ "$arg" = "." ] && echo "${arg/\./"$(basename $(git rev-parse --show-toplevel))"}" || echo "$arg")
     code "/home/natalie/kde/src/$module"
 }
 
-export PATH="/home/natalie/kde/src/kde-builder:$PATH"
 function _comp_kde_builder_launch
 {
   local cur
@@ -234,15 +234,14 @@ function _comp_kde_builder_launch
 
   return 0
 }
-
 ## Register autocomplete function
 complete -o nospace -F _comp_kde_builder_launch kde-builder-launch
 
-alias kdesrc-build='xdotool key "ctrl+shift+o"; xdotool key "ctrl+shift+d"; kde-builder'
-alias kdesrc-build-5='xdotool key "ctrl+shift+o"; xdotool key "ctrl+shift+d"; kde-builder --rc-file=/home/natalie/.config/kde5src-buildrc'
+# alias kdesrc-build='xdotool key "ctrl+shift+o"; xdotool key "ctrl+shift+d"; kde-builder'
+# alias kdesrc-build-5='xdotool key "ctrl+shift+o"; xdotool key "ctrl+shift+d"; kde-builder --rc-file=/home/natalie/.config/kde5src-buildrc'
 function kompile()
 {
-    command="kdesrc-build --no-src --no-include-dependencies"
+    command="kde-builder -S -D"
     for arg in "$@"; do
         # replace "." with current directory name
         module=$([ "$arg" = "." ] && echo "${arg/\./"$(basename $(git rev-parse --show-toplevel))"}" || echo "$arg")
@@ -252,7 +251,7 @@ function kompile()
     command="rainbow --red=error: $command"
     eval "$command"
 }
-compdef _kdesrc-build kompile
+compdef _kde-builder kompile
 
 function kdesrc-install()
 {
@@ -264,7 +263,7 @@ function kdesrc-install()
     done
     eval "$command"
 }
-compdef _kdesrc-build kdesrc-install
+compdef _kde-builder kdesrc-install
 #alias kdesrc-install-sessions='~/kde/build/plasma-workspace/login-sessions/install-sessions.sh'
 
 function kdesrc-test()  # usage: konfirm -R 'testPlacement' kwin
@@ -282,7 +281,7 @@ function kdesrc-test()  # usage: konfirm -R 'testPlacement' kwin
     rm "/home/natalie/kde/src/$module/appiumtest/utils/__pycache__"
 }
 alias konfirm='kdesrc-test'
-compdef _kdesrc-build kdesrc-test
+compdef _kde-builder kdesrc-test
 
 function kdesrc-mr()
 {
@@ -345,6 +344,6 @@ alias touchpaddriver-libinput='sudo mv /etc/X11/xorg.conf.d/40-synaptics.conf /e
 alias restart-powerdevil-dist='systemctl --user restart plasma-powerdevil.service'
 alias restart-powerdevil-dev='pkill org_kde_powerde -u $UID; /home/natalie/kde/usr/lib/libexec/org_kde_powerdevil &'
 alias grep='grep --color=always'
-alias komparediff='~/kde5/usr/bin/kompare -o -'
+alias komparediff='kompare -o -'
 alias procgrep='ps aux | head -n 1; ps aux | grep -v "grep" | grep -i'
-alias zonfig='kwrite ~/Dropbox/Code/dotfiles/zsh/.zshrc'
+alias zonfig='kwrite ~/Dropbox/Code/dotfiles/zsh/.zshrc &'
