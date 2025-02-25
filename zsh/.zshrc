@@ -198,6 +198,7 @@ alias pacfind='yay -Qs'
 alias pacfile='yay -F'
 alias pacinstall='sudo pacman -Sy; yay -S --noconfirm'
 alias pacuninstall='sudo pacman -Sy; yay -R'
+alias pacdownload='function pacdownload() {curl $1 -O; sudo pacman -U $(basename $1)}; pacdownload'
 alias pacupdatabase='sudo pacman -Sy; sudo pacman -Fy'
 alias pacupgradable='yay -Sy && yay -Qu && echo $(yay -Qu | wc -l) "packages to upgrade"'
 alias pacupgrade='xdotool key "ctrl+shift+i"; sudo pacman -Fy; kde-inhibit --power sudo pacman -Syu --noconfirm --disable-download-timeout --ignore=network-manager-sstp,pipewire,libpipewire,libcamera,libcamera-ipa && sudo paccache -r -k 1 && paccache -r -c ~/.cache/yay; notify-send "System upgrade finished" -a "pacman" -i update-none; xdotool key "ctrl+shift+i"'
@@ -209,7 +210,7 @@ function kode()
     code "/home/natalie/kde/src/$module"
 }
 
-function _comp_kde_builder_launch
+function _comp_kde_builder_launch()
 {
   local cur
   COMPREPLY=()
